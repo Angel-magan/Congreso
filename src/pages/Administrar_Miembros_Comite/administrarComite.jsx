@@ -88,7 +88,10 @@ const AdministrarCongresistas = () => {
 
   return (
     <div>
-      <Navbar />
+      <div className="sticky-top">
+        <Navbar />
+      </div>
+
       <section className="container p-5">
         <div className="row justify-content-center">
           <div className="text-center">
