@@ -5,6 +5,7 @@ import Congresista from "../../components/AdmintradorForm/AdminstradorComiteForm
 import Navbar from "../../components/Navbar/Navbar";
 import "./administrarComite.css";
 import Buscador from "../../components/AdmintradorForm/Buscador";
+import Footer from "../../components/Footer/Footer";
 
 const AdministrarCongresistas = () => {
   const [congresistas, setCongresistas] = useState([]);
@@ -130,6 +131,9 @@ const AdministrarCongresistas = () => {
           </div>
         </div>
       </section>
+
+      <Footer />
+
     </div>
   );
 };
