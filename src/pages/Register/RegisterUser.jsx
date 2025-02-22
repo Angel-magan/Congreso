@@ -10,6 +10,7 @@ const RegisterPage = () => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate(); //Esto permite redirigir a otras rutas
 
   const handleRegister = () => {
@@ -57,7 +58,16 @@ const RegisterPage = () => {
 
   return (
     <div>
-      <img src={Logo} className="img-fluid w-25 h-25 rounded" alt="Logo"></img>
+      <section className="d-flex justify-content-between">
+        <div className="w50 h-50">
+          <img
+            src={Logo}
+            className="img-fluid w-50 h-50 rounded"
+            alt="Logo"
+          ></img>
+        </div>
+        <div className="bg-warning w-25"></div>
+      </section>
       <section className="container">
         <div className="row justify-content-center">
           <div className="col-12 col-md-6 text-center">
@@ -87,17 +97,24 @@ const RegisterPage = () => {
               <div className="flex-grow-1 me-2">
                 <RegisterForm
                   text="Contraseña:"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="contraseña"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
-              <i className="bi bi-eye-fill fs-4"></i>
+              <span onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? (
+                  <i className="bi bi-eye-slash-fill fs-4 text-primary"></i>
+                ) : (
+                  <i className="bi bi-eye-fill fs-4 text-primary"></i>
+                )}
+              </span>
             </div>
             <button
               type="button"
               className="btn btn-primary fw-bold px-4"
+              disabled={!name || !lastName || !email || !password}
               onClick={handleRegister}
             >
               Registrarme
