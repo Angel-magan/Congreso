@@ -15,8 +15,18 @@ const Congresista = ({ congresista, onActualizarMiembro }) => {
         );
 
         if (confirmacion) {
-            setChecked(isChecked);
-            onActualizarMiembro(congresista.id_congresista, isChecked ? 1 : 0);
+            onActualizarMiembro(congresista.id_congresista, isChecked ? 1 : 0)
+                .then(() => {
+
+                    window.location.reload();
+                })
+                .catch((error) => {
+                    console.error("Error al actualizar el miembro:", error);
+
+                });
+        } else {
+
+            setChecked(!isChecked);
         }
     };
 
