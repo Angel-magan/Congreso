@@ -5,6 +5,7 @@ import RegisterUser from "./pages/Register/RegisterUser";
 import RegisterCongressman from "./pages/Register/RegisterCongressman";
 import RegisterAuthor from "./pages/Register/RegisterAuthor";
 import Home from "./pages/Home/Home";
+import AdminstrarComite from "./pages/Administrar_Miembros_Comite/administrarComite";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/registerCongressman" element={<RegisterCongressman />} />
         <Route path="/registerAuthor" element={<RegisterAuthor />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/administrarComite" element={<AdminstrarComite />} />
       </Routes>
     </Router>
   );
