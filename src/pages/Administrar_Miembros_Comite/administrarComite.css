@@ -1,3 +1,20 @@
-#Encabezado{
+#Encabezado {
     font-size: 50px;
+}
+
+#bordeAzul {
+    border: 3px solid #59C0E4;
+    border-radius: 30px;
+}
+
+#bordeAzulCongresistas {
+    border-bottom: 3px solid #59C0E4;
+}
+
+.bordeCongresistas {
+    border: 3px solid #EABC54;
+}
+
+.TamanioCongresista{
+    font-size: 35px;
 }

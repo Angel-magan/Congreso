@@ -16,17 +16,20 @@ const Congresista = ({ congresista, onActualizarMiembro }) => {
 
         if (confirmacion) {
             setChecked(isChecked);
-            onActualizarMiembro(congresista.id_congresista, isChecked ? "1" : "0"); // Enviar como string
+            onActualizarMiembro(congresista.id_congresista, isChecked ? 1 : 0);
         }
     };
 
     return (
-        <div className="card mb-3">
-            <div className="card-body">
-                <h5 className="card-title">
-                    {congresista.nombre} {congresista.apellido}
-                </h5>
-                <p className="card-text">Institución: {congresista.institucion}</p>
+        <div className="card mx-5 my-2 bordeCongresistas">
+            <div className="card-body d-flex align-items-center justify-content-between">
+                <div >
+                    <h5 className="card-title">
+                        {congresista.nombre} {congresista.apellido}
+                    </h5>
+                    <p className="card-text">ID Congresista: {congresista.id_congresista}</p>
+                    <p className="card-text">Institución: {congresista.institucion}</p>
+                </div>
                 <div className="form-check">
                     <input
                         className="form-check-input"
