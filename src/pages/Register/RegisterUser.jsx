@@ -11,6 +11,7 @@ const RegisterPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [hoverDisabled, setHoverDisabled] = useState(false); // Estado para controlar hover
   const navigate = useNavigate(); //Esto permite redirigir a otras rutas
 
   const handleRegister = () => {
@@ -111,14 +112,30 @@ const RegisterPage = () => {
                 )}
               </span>
             </div>
-            <button
-              type="button"
-              className="btn btn-primary fw-bold px-4"
-              disabled={!name || !lastName || !email || !password}
-              onClick={handleRegister}
+            {/* Envolvemos el botón en un contenedor que detecta hover */}
+            <div
+              className="position-relative d-inline-block"
+              onMouseEnter={() => setHoverDisabled(true)}
+              onMouseLeave={() => setHoverDisabled(false)}
             >
-              Registrarme
-            </button>
+              <button
+                type="button"
+                className="btn btn-primary fw-bold px-4"
+                disabled={!name || !lastName || !email || !password}
+                onClick={handleRegister}
+              >
+                Registrarme
+              </button>
+              {/* Mostramos el ícono si el botón está deshabilitado y se está haciendo hover */}
+              {(!name || !lastName || !email || !password) && hoverDisabled && (
+                <div
+                  className="position-absolute top-50 start-50 translate-middle"
+                  style={{ pointerEvents: "none" }}
+                >
+                  <i className="bi bi-ban text-danger fw-bold fs-4"></i>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </section>
