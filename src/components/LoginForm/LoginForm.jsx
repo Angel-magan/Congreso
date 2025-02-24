@@ -17,7 +17,12 @@ const LoginForm = () => {
         .then((response) => {
           const userData = response.data; // Aquí estará el id del usuario
           localStorage.setItem("userId", userData.id); // Guardar el id en localStorage
-          // Redirigir a la página home si el usuario y contraseña existe en la bd ("/home")
+
+          const { nombre, apellido, correo } = response.data;
+
+          // Guardar datos en localStorage
+          localStorage.setItem("user", JSON.stringify({ nombre, apellido, correo }));
+
           navigate("/home");
         })
         .catch((error) => {
