@@ -3,6 +3,7 @@ const CardRegister = ({ question, register, link }) => {
   return (
     <div className="card border-warning w-100 me-3 mb-3 p-3">
       <p className="text-center fw-bold fs-4 m-0">{question}</p>
+      <br />
       <p className="text-center fw-bold fs-4 m-0">
         {" "}
         {register}
