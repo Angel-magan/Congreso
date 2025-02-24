@@ -3,25 +3,32 @@ import Logo from "../../assets/images/imgpng.png";
 import Footer from "../../components/Footer/Footer";
 import "../Subir_Trabajo/style.css";
 import Autores from "../../components/TrabajoForm/Autores";
+import SubirArchivo from "../../components/TrabajoForm/SubirArchivo";
+import Swal from "sweetalert2";
+
 
 const SubirTrabajo = () => {
-    
+
+    const [archivoError, setArchivoError] = useState(false);
     const [titulo, setTitulo] = useState("");
     const [abstract, setAbstract] = useState("");
     const [autoresSeleccionados, setAutoresSeleccionados] = useState([]);
     const [documento, setDocumento] = useState(null);
     const [camposCompletados, setCamposCompletados] = useState(false);
+    const [urlDocumento, setUrlDocumento] = useState(null);
 
     useEffect(() => {
-        const tituloValido = titulo.length >= 50 && titulo.length <= 200;
-        const abstractValido = abstract.length >= 900 && abstract.length <= 2000;
+        const tituloValido = titulo.length >= 0 && titulo.length <= 200;
+        const abstractValido = abstract.length >= 0 && abstract.length <= 2000;
         const autoresValidos = autoresSeleccionados.length > 0;
         const documentoValido = documento !== null;
+        const urlDocumentoValido = urlDocumento !== null;
+
 
         setCamposCompletados(
-            tituloValido && abstractValido && autoresValidos && documentoValido
+            tituloValido && abstractValido && autoresValidos && documentoValido && urlDocumentoValido && !archivoError
         );
-    }, [titulo, abstract, autoresSeleccionados, documento]);
+    }, [titulo, abstract, autoresSeleccionados, documento, urlDocumento, archivoError]);
 
     const handleAbstractChange = (e) => {
         setAbstract(e.target.value);
@@ -29,15 +36,101 @@ const SubirTrabajo = () => {
 
     const handleDocumentChange = (e) => {
         if (e.target.files.length > 0) {
-            setDocumento(e.target.files[0]);
+            const archivo = e.target.files[0];
+            const tiposPermitidos = [
+                'application/pdf', //PDF
+                'application/msword', //DOC
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // DOCX
+                'text/plain' //TXT
+            ];
+
+
+
+            if (tiposPermitidos.includes(archivo.type)) {
+                setDocumento(archivo);
+                setUrlDocumento(null);
+            } else {
+                alert('Por favor, selecciona un archivo PDF, DOC, DOCX o TXT.');
+                e.target.value = null;
+                setDocumento(null);
+            }
         } else {
-            setDocumento(null); 
+            setDocumento(null);
         }
     };
 
     const handleAutoresChange = (autores) => {
         setAutoresSeleccionados(autores);
     };
+
+    const handleArchivoSubido = (archivo) => {
+        if (archivo && archivo.error) {
+            console.log("Error al subir el archivo:", archivo.error);
+            setUrlDocumento(null);
+            setArchivoError(true); // Actualizar archivoError a true
+        } else if (archivo && archivo.url) {
+            setUrlDocumento(archivo.url);
+            setArchivoError(false); // Actualizar archivoError a false
+            console.log("URL del documento:", archivo.url);
+        }
+    };
+
+    
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+
+            
+
+            const response = await fetch('http://localhost:5000/api/users/SubirTrabajos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    titulo,
+                    abstract,
+                    autores: autoresSeleccionados,
+                    urlArchivo: urlDocumento,
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.mensaje || "Error al subir el trabajo");
+            }
+
+            // Mostrar la alerta sin botón de confirmación y con temporizador
+            Swal.fire({
+                title: "Trabajo subido",
+                text: "El trabajo se ha guardado correctamente.",
+                icon: "success",
+                showConfirmButton: false, // Oculta el botón "Aceptar"
+                timer: 2000 // La alerta desaparece en 2 segundos
+            });
+
+            // Recargar la página después de que desaparezca la alerta
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
+
+        } catch (error) {
+            Swal.fire({
+                title: "Error",
+                text: error.message,
+                icon: "error",
+                showConfirmButton: false,
+                timer: 2000
+            });
+
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
+        }
+    };
+
 
     return (
         <div className="fondo d-block justify-content-center align-items-center min-vh-100">
@@ -54,7 +147,7 @@ const SubirTrabajo = () => {
             >
                 <h1 className="fw-bold mb-4">¡Sube tu trabajo!</h1>
 
-                <form>
+                <form onSubmit={handleSubmit}>
                     <div className="row mb-3 text-start w-100">
                         <div className="col">
                             <p className="me-1 fw-bold fs-5">Título:</p>
@@ -104,6 +197,9 @@ const SubirTrabajo = () => {
                         <div className="col">
                             <p className="me-1 fw-bold fs-5">Documento:</p>
                         </div>
+                        <p className="mb-3 text-body-tertiary text-start">
+                            Solo se permiten PDF, DOC, DOCS y TXT.<br></br> Tamaño máximo de archivo 100 KB.
+                        </p>
                         <div className="col-9 w-100">
                             <div className="mb-3">
                                 <input
@@ -115,11 +211,13 @@ const SubirTrabajo = () => {
                             </div>
                         </div>
                     </div>
-
+                    {documento && (
+                        <SubirArchivo archivo={documento} onArchivoSubido={handleArchivoSubido} />
+                    )}
                     <button
                         type="submit"
                         className="btn btn-primary w-50 py-2 fw-bold"
-                        disabled={!camposCompletados}
+                        disabled={!camposCompletados || archivoError}
                     >
                         Guardar
                     </button>
