@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import RegisterForm from "../../components/RegisterForm/RegisterForm";
 import Logo from "../../assets/images/imgpng.png";
+import Footer from "../../components/Footer/Footer";
 
 const RegisterCongressman = () => {
+  const [user, setUser] = useState(null);
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
   const [correo, setCorreo] = useState("");
@@ -11,6 +13,22 @@ const RegisterCongressman = () => {
   const [telefono, setTelefono] = useState("");
   const [notificacion, setNotificacion] = useState(0);
   const [mostrarCheckbox, setMostrarCheckbox] = useState(false);
+
+  // Para acceder a la información del usuario
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      setUser(parsedUser);
+      setNombre(parsedUser.nombre);
+      setApellido(parsedUser.apellido); 
+      setCorreo(parsedUser.correo); 
+    }
+  }, []);
+
+  if (!user) {
+    return <p>Cargando usuario...</p>;
+  }
 
   const validarFormatoTelefono = (e) => {
     let valor = e.target.value.replace(/\D/g, ''); // Eliminar todo lo que no sea un número5
@@ -68,7 +86,7 @@ const RegisterCongressman = () => {
       ></div>
       {/* Circulo azul */}
       <div
-        className="d-none d-lg-block"
+        className="d-none d-lg-inline-block"
         style={{
           width: "220px",
           height: "220px",
@@ -100,25 +118,40 @@ const RegisterCongressman = () => {
         <div className="row justify-content-center">
           <div className="col-12 col-lg-6 text-center">
             <h2 className="mb-sm-5">¡Registrate como Congresista!</h2>
-            <RegisterForm 
-              className="form-control border border-primary"
-              text="Nombre:" 
-              placeholder="nombre" 
-              value={nombre}
-              onChange={(e) => { setNombre(e.target.value)}}
-            />
-            <RegisterForm 
-              text="Apellido:" 
-              placeholder="apellido" 
-              value={apellido}
-              onChange={(e) => setApellido(e.target.value)}
-            />
-            <RegisterForm 
-              text="Correo:" 
-              placeholder="correo" 
-              value={correo}
-              onChange={(e) => setCorreo(e.target.value)}
-            />
+            {user ? (
+              <RegisterForm 
+                className="form-control border border-primary"
+                text="Nombre:" 
+                placeholder="nombre" 
+                value={nombre || user.nombre} 
+                readOnly
+                onChange={(e) => setNombre(user.nombre)}
+              />
+            ) : (
+              <p className="text-danger">Por favor, inicia sesión para continuar.</p>
+            )}
+            {user ? (
+              <RegisterForm 
+                text="Apellido:" 
+                placeholder="apellido" 
+                value={apellido || user.apellido}
+                readOnly
+                onChange={(e) => setApellido(user.apellido)}
+              />
+            ) : (
+              <p className="text-danger">Por favor, inicia sesión para continuar.</p>
+            )}
+            {user ? (
+              <RegisterForm 
+                text="Correo:" 
+                placeholder="correo" 
+                value={correo || user.correo}
+                readOnly
+                onChange={(e) => setCorreo(user.correo)}
+              />
+            ) : (
+              <p className="text-danger">Por favor, inicia sesión para continuar.</p>
+            )}
             <RegisterForm 
               text="Institución:" 
               placeholder="Institución" 
@@ -155,7 +188,7 @@ const RegisterCongressman = () => {
               <br />
               <button 
                 type="button"
-                className="btn btn-primary fw-bold px-4 mt-3"
+                className="btn btn-primary fw-bold px-4 mt-2"
                 style={{
                   boxShadow: "0px 4px 10px #000",
                   border: "none",

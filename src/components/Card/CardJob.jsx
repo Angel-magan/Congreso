@@ -3,7 +3,7 @@ const Card = ({ titleJob, date, clock, hall, chairman, ponente }) => {
   return (
     <div className="card border-warning w-100 me-3">
       <div className="card-body">
-        <h5 className="card-title fs-2">{titleJob}</h5>
+        <h5 className="card-title fs-4">{titleJob}</h5>
         <section className="d-flex flex-column flex-md-row">
           <p className="card-text me-md-3">
             <i className="bi bi-calendar-date-fill text-primary"></i>
