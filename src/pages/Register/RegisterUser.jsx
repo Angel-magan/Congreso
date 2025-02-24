@@ -59,16 +59,45 @@ const RegisterPage = () => {
 
   return (
     <div>
-      <section className="d-flex justify-content-between">
-        <div className="w50 h-50">
-          <img
-            src={Logo}
-            className="img-fluid w-50 h-50 rounded"
-            alt="Logo"
-          ></img>
-        </div>
-        <div className="bg-warning w-25"></div>
-      </section>
+      {/* Cuadro amarrillo */}
+      <div
+        className="d-none d-lg-block"
+        style={{
+          width: "200px",
+          height: "200px",
+          background: "#EABC54",
+          position: "absolute",
+          right: "0px",
+        }}
+      ></div>
+      {/* Circulo azul */}
+      <div
+        className="d-none d-lg-block"
+        style={{
+          width: "220px",
+          height: "220px",
+          background: "#4DB3CE",
+          position: "absolute",
+          bottom: "0px",
+          right: "0px",
+          borderRadius: "100% 90px",
+          borderEndEndRadius: "0px",
+        }}
+      ></div>
+      <div
+        className="d-none d-lg-block"
+        style={{
+          width: "250px",
+          height: "250px",
+          clipPath: "polygon(0% 130%, 100% 50%, 0% 40%)", // Define la forma del triángulo
+          position: "absolute",
+          bottom: "0px",
+          left: "0px",
+          background: "#EE8561",
+        }}
+      ></div>
+      <img src={Logo} className="img-fluid w-25 h-25 rounded" alt="Logo"></img>
+      {/* cuadro de inputs */}
       <section className="container">
         <div className="row justify-content-center">
           <div className="col-12 col-md-6 text-center">
@@ -139,6 +168,7 @@ const RegisterPage = () => {
           </div>
         </div>
       </section>
+      {/* Cuadro inputs */}
     </div>
   );
 };
