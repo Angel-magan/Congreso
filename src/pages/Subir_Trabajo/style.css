@@ -1,0 +1,71 @@
+.fondo {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    overflow: hidden;
+    background-color: #fff;
+    z-index: 1;
+}
+
+.trianguloo {
+    position: absolute;
+    bottom: 25px;
+    left: -110px;
+    width: 70vh;
+    height: 30vh;
+    border-left: 10vw solid transparent;
+    border-right: 10vw solid transparent;
+    border-top: 12vw solid #e66b4c;
+    z-index: -1;
+}
+
+.circulo {
+    position: absolute;
+    bottom: -0vh;
+    right: -10vw;
+    width: 25vw;
+    height: 20vw;
+    background-color: #3b9ae1;
+    border-radius: 50%;
+    z-index: -1;
+}
+
+.cuadrado {
+    position: absolute;
+    top: 0vh;
+    right: 0vw;
+    width: 15vw;
+    height: 15vw;
+    background-color: #f5b947;
+    z-index: -1;
+}
+
+.success-message {
+    position: absolute;
+    top: 40%;
+    left: 40%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    opacity: 0;
+    animation: fadeInOut 3s forwards;
+}
+
+.tamanioTextArea {
+    height: 200px;
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}

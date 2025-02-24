@@ -159,7 +159,10 @@ const RegisterAuthor = () => {
       <div className="trianguloo"></div>
       <div className="circulo"></div>
       <div className="cuadrado"></div>
+      <div className="fixed-bottom">
       <Footer />
+      </div>
+      
     </div>
   );
 };
