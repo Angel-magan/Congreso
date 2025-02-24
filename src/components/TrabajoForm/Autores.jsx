@@ -61,8 +61,8 @@ const Autores = ({ onAutoresChange }) => {
                         <option value="">Selecciona un autor</option>
                         {autoresDisponibles.map((autor) => (
                             <option key={autor.id} value={autor.nombre}>
-                                {"ID autor: " + autor.id + " || "}
-                                {"Nombre: " + autor.nombre}
+                                {autor.nombre + " || "}
+                                {autor.correo}
                             </option>
                         ))}
                     </select>
