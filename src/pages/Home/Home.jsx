@@ -11,6 +11,7 @@ const Home = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [sesiones, setSesiones] = useState([]);
   // El AuthContext provee { user }
+  const storedUserId = localStorage.getItem("userId"); 
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
@@ -102,7 +103,7 @@ const Home = () => {
               <CardRegister
                 question={"¿Eres autor de un trabajo?"}
                 register={"Registrate como autor"}
-                link={"registerAuthor"}
+                link={`registerAuthor/${storedUserId}`}
               />
             </>
           )}
