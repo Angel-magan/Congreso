@@ -7,20 +7,20 @@ import Footer from "../../components/Footer/Footer";
 import axios from "axios";
 
 const Home = () => {
-  const [user, setUser] = useState(null);
+  // eslint-disable-next-line no-unused-vars
+  const [userInfo, setUserInfo] = useState(null);
   const [sesiones, setSesiones] = useState([]);
   // El AuthContext provee { user }
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchSesiones = async () => {
-
       try {
         const response = await axios.get("http://localhost:5000/api/sesiones");
         setSesiones(response.data);
       } catch (error) {
         console.error("Error fetching sesiones:", error);
-      } 
+      }
     };
 
     fetchSesiones();
@@ -30,7 +30,7 @@ const Home = () => {
     // Obtener usuario desde localStorage
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      setUserInfo(JSON.parse(storedUser));
     }
   }, []);
 
@@ -39,7 +39,8 @@ const Home = () => {
       <Navbar />
       <div>
         <p className="text-center fw-bold fs-3 m-0 mt-3">
-          ¡Hola, <span>{user ? `${user.nombre} ${user.apellido}` : "Invitado"}</span>!
+          ¡Hola,{" "}
+          <span>{user ? `${user.nombre} ${user.apellido}` : "Invitado"}</span>!
         </p>
         <section className="border border-primary border-2 p-3 m-4 rounded">
           <h3 className="border-bottom border-primary border-3 mx-2 w-25">
@@ -52,7 +53,10 @@ const Home = () => {
                   key={index}
                   titleJob={sesion.titulo}
                   date={new Date(sesion.fecha_hora).toLocaleDateString()}
-                  clock={new Date(sesion.fecha_hora).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                  clock={new Date(sesion.fecha_hora).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
                   hall={`Sala: ${sesion.sala}`}
                   chairman={sesion.moderador}
                   ponente={sesion.ponente}

@@ -13,30 +13,20 @@ const LoginForm = () => {
 
   const handleLogin = () => {
     if (email && password) {
-      // axios
-      //   .post("http://localhost:5000/api/users/login", {
-      //     email,
-      //     password,
-      //   })
-      //   .then((response) => {
-      //     const userData = response.data; // Aquí estará el id del usuario
-      //     localStorage.setItem("userId", userData.id); // Guardar el id en localStorage
-      //     // Redirigir a la página home si el usuario y contraseña existe en la bd ("/home")
-      //     navigate("/home");
-      //   })
       axios
         .post("http://localhost:5000/api/users/login", { email, password })
         .then((response) => {
-          const { nombre, rol } = response.data;
+          const { nombre, rol, apellido, correo } = response.data;
           // Guardar la info del usuario en un contexto o state
-          setUser({ nombre, rol });
+          setUser({ nombre, apellido, rol });
           const userData = response.data; // Aquí estará el id del usuario
           localStorage.setItem("userId", userData.id); // Guardar el id en localStorage
 
-          const { nombre, apellido, correo } = response.data;
-
           // Guardar datos en localStorage
-          localStorage.setItem("user", JSON.stringify({ nombre, apellido, correo }));
+          localStorage.setItem(
+            "user",
+            JSON.stringify({ nombre, apellido, correo })
+          );
 
           navigate("/home");
         })
