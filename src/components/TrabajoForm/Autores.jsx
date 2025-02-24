@@ -1,37 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import axios from 'axios'; // Importa axios
+import axios from 'axios';
 
 const Autores = ({ onAutoresChange }) => {
     const [autoresDisponibles, setAutoresDisponibles] = useState([]);
     const [autoresSeleccionados, setAutoresSeleccionados] = useState([]);
     const [autorSeleccionado, setAutorSeleccionado] = useState('');
-    const [error, setError] = useState(null); // Estado para manejar errores
+    const [error, setError] = useState(null);
 
     const handleAutorChange = (e) => {
         setAutorSeleccionado(e.target.value);
     };
 
     const agregarAutor = () => {
-        if (autorSeleccionado && !autoresSeleccionados.includes(autorSeleccionado)) {
-            setAutoresSeleccionados([...autoresSeleccionados, autorSeleccionado]);
-            setAutorSeleccionado('');
+        if (autorSeleccionado) {
+            const autorSeleccionadoObj = autoresDisponibles.find(autor => autor.nombre === autorSeleccionado);
+            if (autorSeleccionadoObj && !autoresSeleccionados.some(autor => autor.id === autorSeleccionadoObj.id)) {
+                setAutoresSeleccionados([...autoresSeleccionados, autorSeleccionadoObj]);
+                setAutorSeleccionado('');
+            }
         }
     };
 
     const eliminarAutor = (event, autorAEliminar) => {
         event.preventDefault();
         setAutoresSeleccionados(
-            autoresSeleccionados.filter((autor) => autor !== autorAEliminar)
+            autoresSeleccionados.filter(autor => autor.id !== autorAEliminar.id)
         );
     };
 
     useEffect(() => {
         const fetchAutores = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/users/trabajos'); // Reemplaza '/api/autores' con la URL de tu API
-                setAutoresDisponibles(response.data); // Asume que la API devuelve un array de autores
-                setError(null); // Limpia cualquier error previo
+                const response = await axios.get('http://localhost:5000/api/users/autores');
+                setAutoresDisponibles(response.data);
+                setError(null);
             } catch (err) {
                 setError('Error al cargar los autores.');
                 console.error('Error fetching autores:', err);
@@ -43,13 +46,14 @@ const Autores = ({ onAutoresChange }) => {
 
     useEffect(() => {
         if (onAutoresChange) {
-            onAutoresChange(autoresSeleccionados);
+            const autoresIds = autoresSeleccionados.map(autor => autor.id);
+            onAutoresChange(autoresIds);
         }
     }, [autoresSeleccionados, onAutoresChange]);
 
     return (
         <div className="w-100">
-            {error && <div className="alert alert-danger">{error}</div>} {/* Muestra el mensaje de error */}
+            {error && <div className="alert alert-danger">{error}</div>}
             <div className="mb-3">
                 <div className="input-group">
                     <select
@@ -61,8 +65,7 @@ const Autores = ({ onAutoresChange }) => {
                         <option value="">Selecciona un autor</option>
                         {autoresDisponibles.map((autor) => (
                             <option key={autor.id} value={autor.nombre}>
-                                {autor.nombre + " || "}
-                                {autor.correo}
+                                {autor.nombre + " || " + autor.correo}
                             </option>
                         ))}
                     </select>
@@ -87,7 +90,7 @@ const Autores = ({ onAutoresChange }) => {
                         <input
                             type="text"
                             className="form-control"
-                            value={autor}
+                            value={autor.nombre + " || " + autor.correo}
                             readOnly
                         />
                         <button
