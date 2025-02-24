@@ -41,7 +41,7 @@ const Home = () => {
       <div>
         <p className="text-center fw-bold fs-3 m-0 mt-3">
           ¡Hola,{" "}
-          <span>{user ? `${user.nombre} ${user.apellido}` : "Invitado"}</span>!
+          <span>{userInfo ? `${userInfo.nombre} ${userInfo.apellido}` : "Invitado"}</span>!
         </p>
         <section className="border border-primary border-2 p-3 m-4 rounded">
           <h3 className="border-bottom border-primary border-3 mx-2 w-25">
