@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Congresista from "../../components/AdmintradorForm/AdminstradorComiteForm";
 import Navbar from "../../components/Navbar/Navbar";
-import "./administrarComite.css";
+import "./style.css";
 import Buscador from "../../components/AdmintradorForm/Buscador";
 import Footer from "../../components/Footer/Footer";
 
