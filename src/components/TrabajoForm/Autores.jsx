@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from 'axios'; // Importa axios
 
 const Autores = ({ onAutoresChange }) => {
-    const [autoresDisponibles, setAutoresDisponibles] = useState([
-        'Autor 1',
-        'Autor 2',
-        'Autor 3',
-        'Autor 4',
-    ]);
+    const [autoresDisponibles, setAutoresDisponibles] = useState([]);
     const [autoresSeleccionados, setAutoresSeleccionados] = useState([]);
     const [autorSeleccionado, setAutorSeleccionado] = useState('');
+    const [error, setError] = useState(null); // Estado para manejar errores
 
     const handleAutorChange = (e) => {
         setAutorSeleccionado(e.target.value);
@@ -30,6 +27,21 @@ const Autores = ({ onAutoresChange }) => {
     };
 
     useEffect(() => {
+        const fetchAutores = async () => {
+            try {
+                const response = await axios.get('http://localhost:5000/api/users/trabajos'); // Reemplaza '/api/autores' con la URL de tu API
+                setAutoresDisponibles(response.data); // Asume que la API devuelve un array de autores
+                setError(null); // Limpia cualquier error previo
+            } catch (err) {
+                setError('Error al cargar los autores.');
+                console.error('Error fetching autores:', err);
+            }
+        };
+
+        fetchAutores();
+    }, []);
+
+    useEffect(() => {
         if (onAutoresChange) {
             onAutoresChange(autoresSeleccionados);
         }
@@ -37,6 +49,7 @@ const Autores = ({ onAutoresChange }) => {
 
     return (
         <div className="w-100">
+            {error && <div className="alert alert-danger">{error}</div>} {/* Muestra el mensaje de error */}
             <div className="mb-3">
                 <div className="input-group">
                     <select
@@ -47,13 +60,14 @@ const Autores = ({ onAutoresChange }) => {
                     >
                         <option value="">Selecciona un autor</option>
                         {autoresDisponibles.map((autor) => (
-                            <option key={autor} value={autor}>
-                                {autor}
+                            <option key={autor.id} value={autor.nombre}>
+                                {"ID autor: " + autor.id + " || "}
+                                {"Nombre: " + autor.nombre}
                             </option>
                         ))}
                     </select>
                     <button
-                        className="btn btn-outline-secondary"
+                        className="btn btn-outline-dark"
                         type="button"
                         onClick={agregarAutor}
                     >
