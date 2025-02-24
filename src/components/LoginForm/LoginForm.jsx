@@ -30,6 +30,14 @@ const LoginForm = () => {
           const { nombre, rol } = response.data;
           // Guardar la info del usuario en un contexto o state
           setUser({ nombre, rol });
+          const userData = response.data; // Aquí estará el id del usuario
+          localStorage.setItem("userId", userData.id); // Guardar el id en localStorage
+
+          const { nombre, apellido, correo } = response.data;
+
+          // Guardar datos en localStorage
+          localStorage.setItem("user", JSON.stringify({ nombre, apellido, correo }));
+
           navigate("/home");
         })
         .catch((error) => {
