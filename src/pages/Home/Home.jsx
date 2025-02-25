@@ -13,6 +13,15 @@ const Home = () => {
   // El AuthContext provee { user }
   const { user } = useContext(AuthContext);
 
+  // Si el usuario tiene ambos roles, podemos mostrar una sola card
+  const roles = user && user.roles ? user.roles : [];
+  console.log("Roles del usuario:", roles);
+
+  const isCongresista = roles.includes("Congresista");
+  const isAutor = roles.includes("Autor");
+  const isNormal = !isCongresista && !isAutor;
+  const isAmbos = isCongresista && isAutor;
+
   useEffect(() => {
     const fetchSesiones = async () => {
       try {
@@ -27,12 +36,13 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    // Obtener usuario desde localStorage
+    // Escuchar cambios en localStorage para actualizar userInfo y roles
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      setUserInfo(JSON.parse(storedUser));
+      const parsedUser = JSON.parse(storedUser);
+      setUserInfo(parsedUser);
     }
-  }, []);
+  }, [user]); // Se ejecuta cuando el contexto de usuario cambia
 
   return (
     <>
@@ -41,6 +51,7 @@ const Home = () => {
         <p className="text-center fw-bold fs-3 m-0 mt-3">
           ¡Hola,{" "}
           <span>{user ? `${user.nombre} ${user.apellido}` : "Invitado"}</span>!
+          !
         </p>
         <section className="border border-primary border-2 p-3 m-4 rounded">
           <h3 className="border-bottom border-primary border-3 mx-2 w-25">
@@ -68,41 +79,56 @@ const Home = () => {
           </div>
         </section>
         <div className="m-4">
-          {user?.rol === "Congresista" ? (
+          {isNormal && (
+            <>
+              <CardRegister
+                question={"¿Quieres ser parte de este evento?"}
+                register={"Regístrate como congresista"}
+                link={"registerCongressman"}
+              />
+              <CardRegister
+                question={"¿Eres autor de un trabajo?"}
+                register={"Regístrate como autor"}
+                link={"registerAuthor"}
+              />
+            </>
+          )}
+
+          {isCongresista && !isAutor && (
             <>
               <CardRegister
                 question={"¿Eres autor de un trabajo?"}
-                register={"Registrate como autor"}
+                register={"Regístrate como autor"}
                 link={"registerAuthor"}
               />
-
               <CardRegister
                 question={
-                  "CICMA es un evento abierto para academicos de todo el mundo que desea presentar sus ultimos descubrimiento sen fisica, quimica, biología, astronomia, entre otras áreas"
+                  "CICMA es un evento abierto para académicos de todo el mundo que desean presentar sus últimos descubrimientos en física, química, biología, astronomía, entre otras áreas"
                 }
                 register={"Si deseas presentar tu trabajo, presiona"}
-                link={"registerAuthor"}
+                link={"subirTrabajo"}
               />
             </>
-          ) : user?.rol === "Autor" ? (
+          )}
+
+          {isAutor && !isCongresista && (
             <>
               <CardRegister
-                question={"¿Quieres er parte de este evento?"}
-                register={"Registrate como congresista"}
+                question={"¿Quieres ser parte de este evento?"}
+                register={"Regístrate como congresista"}
                 link={"registerCongressman"}
               />
             </>
-          ) : (
+          )}
+
+          {isAmbos && (
             <>
               <CardRegister
-                question={"¿Quieres er parte de este evento?"}
-                register={"Registrate como congresista"}
-                link={"registerCongressman"}
-              />
-              <CardRegister
-                question={"¿Eres autor de un trabajo?"}
-                register={"Registrate como autor"}
-                link={"registerAuthor"}
+                question={
+                  "CICMA es un evento abierto para académicos de todo el mundo que desean presentar sus últimos descubrimientos en física, química, biología, astronomía, entre otras áreas"
+                }
+                register={"Si deseas presentar tu trabajo, presiona"}
+                link={"subirTrabajo"}
               />
             </>
           )}

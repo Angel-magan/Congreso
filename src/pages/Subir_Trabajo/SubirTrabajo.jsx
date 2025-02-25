@@ -75,61 +75,74 @@ const SubirTrabajo = () => {
         }
     };
 
-    
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
+const handleSubmit = async (e) => {
+    e.preventDefault();
 
-            
+    // Validar en el frontend: Si ningún autor es congresista, se muestra error.
+    const tieneCongresista = autoresSeleccionados.some(autor => autor.esCongresista);
+    console.log("Autores seleccionados:", autoresSeleccionados);
 
-            const response = await fetch('http://localhost:5000/api/users/SubirTrabajos', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    titulo,
-                    abstract,
-                    autores: autoresSeleccionados,
-                    urlArchivo: urlDocumento,
-                })
-            });
+    if (!tieneCongresista) {
+        Swal.fire({
+            title: "Error",
+            text: "Al menos uno de los autores debe ser congresista.",
+            icon: "error",
+            showConfirmButton: true
+        });
+        return;
+    }
 
-            const data = await response.json();
+    // Proceder con el envío del formulario
+    try {
+        const response = await fetch('http://localhost:5000/api/users/SubirTrabajos', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                titulo,
+                abstract,
+                autores: autoresSeleccionados,  // Se envían los objetos completos
+                urlArchivo: urlDocumento,
+            })
+        });
 
-            if (!response.ok) {
-                throw new Error(data.mensaje || "Error al subir el trabajo");
-            }
+        const data = await response.json();
 
-            // Mostrar la alerta sin botón de confirmación y con temporizador
-            Swal.fire({
-                title: "Trabajo subido",
-                text: "El trabajo se ha guardado correctamente.",
-                icon: "success",
-                showConfirmButton: false, // Oculta el botón "Aceptar"
-                timer: 2000 // La alerta desaparece en 2 segundos
-            });
-
-            // Recargar la página después de que desaparezca la alerta
-            setTimeout(() => {
-                window.location.reload();
-            }, 2000);
-
-        } catch (error) {
-            Swal.fire({
-                title: "Error",
-                text: error.message,
-                icon: "error",
-                showConfirmButton: false,
-                timer: 2000
-            });
-
-            setTimeout(() => {
-                window.location.reload();
-            }, 2000);
+        if (!response.ok) {
+            throw new Error(data.mensaje || "Error al subir el trabajo");
         }
-    };
+
+        Swal.fire({
+            title: "Trabajo subido",
+            text: "El trabajo se ha guardado correctamente.",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 2000
+        });
+
+        setTimeout(() => {
+            window.location.reload();
+        }, 2000);
+
+    } catch (error) {
+        Swal.fire({
+            title: "Error",
+            text: error.message,
+            icon: "error",
+            showConfirmButton: false,
+            timer: 2000
+        });
+
+        setTimeout(() => {
+            window.location.reload();
+        }, 2000);
+    }
+};
+
+
+
 
 
     return (
