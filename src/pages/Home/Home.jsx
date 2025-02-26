@@ -12,6 +12,7 @@ const Home = () => {
   const [sesiones, setSesiones] = useState([]);
   // El AuthContext provee { user }
   const { user } = useContext(AuthContext);
+  
 
   // Si el usuario tiene ambos roles, podemos mostrar una sola card
   const roles = user && user.roles ? user.roles : [];

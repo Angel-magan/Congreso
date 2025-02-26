@@ -141,10 +141,6 @@ const handleSubmit = async (e) => {
     }
 };
 
-
-
-
-
     return (
         <div className="fondo d-block justify-content-center align-items-center min-vh-100">
             <img
