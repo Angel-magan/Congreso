@@ -23,7 +23,7 @@ function Navbar() {
                                 <Link to="/donar" className="btn text-light m-1 fs-3 bg-btn-navbar">
                                     <i className="bi bi-person-fill"></i>
                                 </Link>
-                                <Link to="/donar" className="btn text-danger m-1 fs-3 bg-btn-navbar">
+                                <Link to="/" className="btn text-danger m-1 fs-3 bg-btn-navbar">
                                     <i className="bi bi-box-arrow-right"></i>
                                 </Link>
                             </div>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 import RegisterForm from "../../components/RegisterForm/RegisterForm";
 import Logo from "../../assets/images/imgpng.png";
@@ -22,7 +23,14 @@ const RegisterPage = () => {
     if (name && lastName && email && password) {
       // Verificar si el correo tiene un formato válido
       if (!emailRegex.test(email)) {
-        alert("Por favor, ingresa un correo electrónico válido.");
+        // alert("Por favor, ingresa un correo electrónico válido.");
+        Swal.fire({
+          title: "Error",
+          text: "Por favor, ingresa un correo electrónico válido.",
+          icon: "error",
+          showConfirmButton: false,
+          timer: 3000,
+        });
         return; // Detener el registro si el correo no es válido
       }
       // Hacer la solicitud al backend para registrar el usuario
@@ -35,25 +43,53 @@ const RegisterPage = () => {
         })
         .then((response) => {
           console.log(response.data);
-          alert("Usuario ingresado correctamente");
+          Swal.fire({
+            title: "Registro",
+            text: "Usuario ingresado correctamente.",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 3000,
+          });
           navigate("/"); //Aqui lo manda al login
         })
         .catch((error) => {
           if (error.response && error.response.status === 400) {
             if (error.response.data.message.includes("La contraseña")) {
-              alert(
-                "La contraseña debe tener al menos 8 caracteres, incluir una letra mayúscula y un número."
-              );
+              Swal.fire({
+                title: "Contraseña",
+                text: "La contraseña debe tener al menos 8 caracteres, incluir una letra mayúscula y un número.",
+                icon: "error",
+                showConfirmButton: false,
+                timer: 3000,
+              });
             } else {
-              alert("El correo ya está registrado. Usa otro email.");
+              Swal.fire({
+                title: "Error",
+                text: "El correo ya está registrado. Usa otro email.",
+                icon: "error",
+                showConfirmButton: false,
+                timer: 3000,
+              });
             }
           } else {
             console.error("Error registrando usuario:", error);
-            alert("Hubo un problema al registrar el usuario.");
+            Swal.fire({
+              title: "Registro",
+              text: "Hubo un problema al registrar el usuario.",
+              icon: "error",
+              showConfirmButton: false,
+              timer: 3000,
+            });
           }
         });
     } else {
-      alert("Por favor, completa todos los campos.");
+      Swal.fire({
+        title: "Error",
+        text: "Por favor, completa todos los campos.",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 3000,
+      });
     }
   };
 
