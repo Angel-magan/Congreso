@@ -12,7 +12,6 @@ const AdministrarCongresistas = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-
   const [filteredCongresistas, setFilteredCongresistas] = useState([]);
   const [filterValue, setFilterValue] = useState("");
   const [filterBy, setFilterBy] = useState("nombre");
@@ -80,60 +79,67 @@ const AdministrarCongresistas = () => {
   };
 
   if (loading) {
-    return <div>Cargando congresistas...</div>;
+    return <div className="text-center p-5">Cargando congresistas...</div>;
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div className="text-center p-5 text-danger">{error}</div>;
   }
 
   return (
     <div>
-      <div className="sticky-top">
-        <Navbar />
-      </div>
+      <Navbar />
 
-      <section className="container p-5">
+      <section className="container py-5">
         <div className="row justify-content-center">
           <div className="text-center">
-            <h2 className="pb-5 fw-bold" id="Encabezado">Administración de Comité</h2>
-            <div id="bordeAzul" className="row my-3">
-              <div className="d-flex flex-column flex-md-row justify-content-md-between align-items-md-center">
-                <div className="col-md-4 p-4">
-                  <h3 id="bordeAzulCongresistas" className="TamanioCongresista py-3 mx-4 text-start">Congresistas</h3>
-                </div>
-                <div className="col-md-7">
-                  <Buscador onFilterChange={handleFilterChange} />
-                </div>
+            <h2 className="pb-4 fw-bold" id="Encabezado">Administración de Comité</h2>
+
+            <div
+              id="bordeAzul"
+              className="row my-3 mx-1 p-3 border border-primary border-2 rounded shadow-sm"
+            >
+              {/* Sección de Filtro y Buscador */}
+              <div className="col-12 col-md-4 p-2">
+                <h3 id="bordeAzulCongresistas" className="py-2 text-center text-md-start">
+                  Congresistas
+                </h3>
               </div>
-              <div className="mt-2 mb-4">
-                {filteredCongresistas.length > 0 ? (
-                  filteredCongresistas.map((congresista) => (
-                    <Congresista
-                      key={congresista.id_congresista}
-                      congresista={congresista}
-                      onActualizarMiembro={actualizarMiembro}
-                    />
-                  ))
-                ) : (
-                  <p>No hay congresistas registrados.</p>
-                )}
+              <div className="col-12 col-md-8">
+                <Buscador onFilterChange={handleFilterChange} />
               </div>
             </div>
 
-            <button
-              type="button"
-              className="btn btn-primary fw-bold px-4 mt-3"
-              onClick={handleFinalizar}
-            >
-              Finalizar
-            </button>
+            {/* Lista de Congresistas */}
+            <div className="mt-3">
+              {filteredCongresistas.length > 0 ? (
+                filteredCongresistas.map((congresista) => (
+                  <Congresista
+                    key={congresista.id_congresista}
+                    congresista={congresista}
+                    onActualizarMiembro={actualizarMiembro}
+                  />
+                ))
+              ) : (
+                <p className="text-muted">No hay congresistas registrados.</p>
+              )}
+            </div>
+
+            {/* Botón Finalizar */}
+            <div className="d-flex justify-content-center mt-4">
+              <button
+                type="button"
+                className="btn btn-primary fw-bold px-4"
+                onClick={handleFinalizar}
+              >
+                Finalizar
+              </button>
+            </div>
           </div>
         </div>
       </section>
 
       <Footer />
-
     </div>
   );
 };

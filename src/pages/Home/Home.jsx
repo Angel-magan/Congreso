@@ -5,6 +5,7 @@ import Navbar from "../../components/Navbar/Navbar";
 import AuthContext from "../../context/AuthContext";
 import Footer from "../../components/Footer/Footer";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   // eslint-disable-next-line no-unused-vars
@@ -52,7 +53,6 @@ const Home = () => {
         <p className="text-center fw-bold fs-3 m-0 mt-3">
           ¡Hola,{" "}
           <span>{user ? `${user.nombre} ${user.apellido}` : "Invitado"}</span>!
-          !
         </p>
         <section className="border border-primary border-2 p-3 m-4 rounded">
           <div className="d-flex flex-column flex-md-row align-items-center justify-content-between">
@@ -62,38 +62,35 @@ const Home = () => {
 
             {isComite && (
               <div className="dropdown mt-2 mt-md-0 text-md-end">
-              <button
-                className="btn btn-primary dropdown-toggle px-3 py-2 shadow-sm rounded"
-                type="button"
-                id="dropdownMenuButton1"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-                style={{ minWidth: "120px", backgroundColor: "#007bff", borderColor: "#0056b3" }} // Azul moderno
-              >
-                Navegación
-              </button>
-              <ul
-                className="dropdown-menu dropdown-menu-end shadow rounded bg-light"
-                aria-labelledby="dropdownMenuButton1"
-                style={{ border: "1px solid #ddd" }} // Borde sutil
-              >
-                <li>
-                  <a className="dropdown-item text-dark" href="#" style={{ transition: "0.3s", color: "#333" }}>
-                    Opción 1
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item text-dark" href="#" style={{ transition: "0.3s", color: "#333" }}>
-                    Opción 2
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item text-dark" href="#" style={{ transition: "0.3s", color: "#333" }}>
-                    Opción 3
-                  </a>
-                </li>
-              </ul>
-            </div>
+                <button
+                  className="btn btn-primary dropdown-toggle px-3 py-2 shadow-sm rounded"
+                  type="button"
+                  id="dropdownMenuButton1"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  style={{
+                    minWidth: "120px",
+                    backgroundColor: "#007bff",
+                    borderColor: "#0056b3",
+                  }} // Azul moderno
+                >
+                  Navegación
+                </button>
+                <ul
+                  className="dropdown-menu dropdown-menu-end shadow rounded bg-light"
+                  aria-labelledby="dropdownMenuButton1"
+                  style={{ border: "1px solid #ddd" }} // Borde sutil
+                >
+                  <li>
+                    <Link
+                      className="dropdown-item text-dark"
+                      to="/administrarComite"
+                    >
+                      Administrar Comité
+                    </Link>
+                  </li>
+                </ul>
+              </div>
             )}
           </div>
                     
