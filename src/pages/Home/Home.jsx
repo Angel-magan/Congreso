@@ -12,7 +12,6 @@ const Home = () => {
   const [sesiones, setSesiones] = useState([]);
   // El AuthContext provee { user }
   const { user } = useContext(AuthContext);
-  
 
   // Si el usuario tiene ambos roles, podemos mostrar una sola card
   const roles = user && user.roles ? user.roles : [];
@@ -56,65 +55,70 @@ const Home = () => {
           !
         </p>
         <section className="border border-primary border-2 p-3 m-4 rounded">
-        <div className="d-flex justify-content-between">
-            <h3 className="border-bottom border-primary border-3 mx-2 w-25">
-              Programación
-            </h3>
+          <div className="d-flex flex-column flex-md-row align-items-center justify-content-between">
+          <h3 className="border-bottom border-primary border-3 mx-2 d-inline-block">
+  Programación
+</h3>
 
             {isComite && (
-              <div className="dropdown">
+              <div className="dropdown mt-2 mt-md-0 text-md-end">
                 <button
-                  className="btn btn-secondary dropdown-toggle"
+                  className="btn btn-secondary dropdown-toggle px-3 py-2 shadow-sm rounded"
                   type="button"
                   id="dropdownMenuButton1"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
+                  style={{ minWidth: "120px" }} // Ancho mínimo para evitar que sea muy pequeño
                 >
-                  Navegación
+                  Navegación
                 </button>
                 <ul
-                  className="dropdown-menu"
+                  className="dropdown-menu dropdown-menu-end shadow rounded"
                   aria-labelledby="dropdownMenuButton1"
                 >
                   <li>
                     <a className="dropdown-item" href="#">
-                      Opción 1
+                      Opción 1
                     </a>
                   </li>
                   <li>
                     <a className="dropdown-item" href="#">
-                      Opción 2
+                      Opción 2
                     </a>
                   </li>
                   <li>
                     <a className="dropdown-item" href="#">
-                      Opción 3
+                      Opción 3
                     </a>
                   </li>
                 </ul>
               </div>
             )}
           </div>
-
-          <br />
-          <div className="d-flex justify-content-center mb-2">
+                    
+          <br />
+          <div className="row g-3">
             {Array.isArray(sesiones) ? (
               sesiones.map((sesion, index) => (
-                <Card
+                <div
                   key={index}
-                  titleJob={sesion.titulo}
-                  date={new Date(sesion.fecha_hora).toLocaleDateString()}
-                  clock={new Date(sesion.fecha_hora).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                  hall={`Sala: ${sesion.sala}`}
-                  chairman={sesion.moderador}
-                  ponente={sesion.ponente}
-                />
+                  className="col-12 col-md-6 col-lg-4 d-flex justify-content-center"
+                >
+                  <Card
+                    titleJob={sesion.titulo}
+                    date={new Date(sesion.fecha_hora).toLocaleDateString()}
+                    clock={new Date(sesion.fecha_hora).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                    hall={`Sala: ${sesion.sala}`}
+                    chairman={sesion.moderador}
+                    ponente={sesion.ponente}
+                  />
+                </div>
               ))
             ) : (
-              <p>No hay sesiones disponibles</p>
+              <p className="text-center">No hay sesiones disponibles</p>
             )}
           </div>
         </section>
