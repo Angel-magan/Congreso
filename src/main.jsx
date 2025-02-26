@@ -2,6 +2,8 @@
 import { createRoot } from "react-dom/client";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import "bootstrap/dist/js/bootstrap.bundle.min";
+
 import "./main.css";
 import logo from "../src/assets/images/Logo_congreso.png";
 
