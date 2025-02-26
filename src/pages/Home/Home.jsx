@@ -22,6 +22,7 @@ const Home = () => {
   const isAutor = roles.includes("Autor");
   const isNormal = !isCongresista && !isAutor;
   const isAmbos = isCongresista && isAutor;
+  const isComite = roles.includes("miembro_comite");
 
   useEffect(() => {
     const fetchSesiones = async () => {
@@ -55,9 +56,47 @@ const Home = () => {
           !
         </p>
         <section className="border border-primary border-2 p-3 m-4 rounded">
-          <h3 className="border-bottom border-primary border-3 mx-2 w-25">
-            Programación
-          </h3>
+        <div className="d-flex justify-content-between">
+            <h3 className="border-bottom border-primary border-3 mx-2 w-25">
+              Programación
+            </h3>
+
+            {isComite && (
+              <div className="dropdown">
+                <button
+                  className="btn btn-secondary dropdown-toggle"
+                  type="button"
+                  id="dropdownMenuButton1"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Navegación
+                </button>
+                <ul
+                  className="dropdown-menu"
+                  aria-labelledby="dropdownMenuButton1"
+                >
+                  <li>
+                    <a className="dropdown-item" href="#">
+                      Opción 1
+                    </a>
+                  </li>
+                  <li>
+                    <a className="dropdown-item" href="#">
+                      Opción 2
+                    </a>
+                  </li>
+                  <li>
+                    <a className="dropdown-item" href="#">
+                      Opción 3
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            )}
+          </div>
+
+          <br />
           <div className="d-flex justify-content-center mb-2">
             {Array.isArray(sesiones) ? (
               sesiones.map((sesion, index) => (
