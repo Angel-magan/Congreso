@@ -56,43 +56,44 @@ const Home = () => {
         </p>
         <section className="border border-primary border-2 p-3 m-4 rounded">
           <div className="d-flex flex-column flex-md-row align-items-center justify-content-between">
-          <h3 className="border-bottom border-primary border-3 mx-2 d-inline-block">
-  Programación
-</h3>
+            <h3 className="border-bottom border-primary border-3 mx-2 d-inline-block">
+              Programación
+            </h3>
 
             {isComite && (
               <div className="dropdown mt-2 mt-md-0 text-md-end">
-                <button
-                  className="btn btn-secondary dropdown-toggle px-3 py-2 shadow-sm rounded"
-                  type="button"
-                  id="dropdownMenuButton1"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                  style={{ minWidth: "120px" }} // Ancho mínimo para evitar que sea muy pequeño
-                >
-                  Navegación
-                </button>
-                <ul
-                  className="dropdown-menu dropdown-menu-end shadow rounded"
-                  aria-labelledby="dropdownMenuButton1"
-                >
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Opción 1
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Opción 2
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Opción 3
-                    </a>
-                  </li>
-                </ul>
-              </div>
+              <button
+                className="btn btn-primary dropdown-toggle px-3 py-2 shadow-sm rounded"
+                type="button"
+                id="dropdownMenuButton1"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                style={{ minWidth: "120px", backgroundColor: "#007bff", borderColor: "#0056b3" }} // Azul moderno
+              >
+                Navegación
+              </button>
+              <ul
+                className="dropdown-menu dropdown-menu-end shadow rounded bg-light"
+                aria-labelledby="dropdownMenuButton1"
+                style={{ border: "1px solid #ddd" }} // Borde sutil
+              >
+                <li>
+                  <a className="dropdown-item text-dark" href="#" style={{ transition: "0.3s", color: "#333" }}>
+                    Opción 1
+                  </a>
+                </li>
+                <li>
+                  <a className="dropdown-item text-dark" href="#" style={{ transition: "0.3s", color: "#333" }}>
+                    Opción 2
+                  </a>
+                </li>
+                <li>
+                  <a className="dropdown-item text-dark" href="#" style={{ transition: "0.3s", color: "#333" }}>
+                    Opción 3
+                  </a>
+                </li>
+              </ul>
+            </div>
             )}
           </div>
                     
