@@ -1,7 +1,6 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useContext } from "react";
 
 import AuthContext from "../../context/AuthContext";
 
@@ -16,18 +15,11 @@ const LoginForm = () => {
       axios
         .post("http://localhost:5000/api/users/login", { email, password })
         .then((response) => {
-          const { nombre, rol, apellido, correo } = response.data;
-          // Guardar la info del usuario en un contexto o state
-          setUser({ nombre, apellido, rol });
-          const userData = response.data; // Aquí estará el id del usuario
-          localStorage.setItem("userId", userData.id); // Guardar el id en localStorage
-
-          // Guardar datos en localStorage
-          localStorage.setItem(
-            "user",
-            JSON.stringify({ nombre, apellido, correo })
-          );
-
+          console.log("Respuesta de login:", response.data);
+          setUser(response.data); // Guarda el nuevo usuario en el estado
+          // Guardar usuario en localStorage
+          localStorage.setItem("user", JSON.stringify(response.data));
+          setUser(response.data); // Guarda todo, incluyendo roles
           navigate("/home");
         })
         .catch((error) => {

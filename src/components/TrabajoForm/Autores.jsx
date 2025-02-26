@@ -33,6 +33,7 @@ const Autores = ({ onAutoresChange }) => {
         const fetchAutores = async () => {
             try {
                 const response = await axios.get('http://localhost:5000/api/users/autores');
+                console.log("Datos recibidos de la API:", response.data); 
                 setAutoresDisponibles(response.data);
                 setError(null);
             } catch (err) {
@@ -46,8 +47,9 @@ const Autores = ({ onAutoresChange }) => {
 
     useEffect(() => {
         if (onAutoresChange) {
-            const autoresIds = autoresSeleccionados.map(autor => autor.id);
-            onAutoresChange(autoresIds);
+            //const autoresIds = autoresSeleccionados.map(autor => autor.id);
+            //onAutoresChange(autoresIds);
+            onAutoresChange(autoresSeleccionados);
         }
     }, [autoresSeleccionados, onAutoresChange]);
 
@@ -85,6 +87,7 @@ const Autores = ({ onAutoresChange }) => {
             </p>
 
             <div className="border p-3 rounded">
+            <p className="me-1 fw-bold fs-5">Lista de autores:</p>
                 {autoresSeleccionados.map((autor, index) => (
                     <div key={index} className="mb-2 d-flex align-items-center">
                         <input
