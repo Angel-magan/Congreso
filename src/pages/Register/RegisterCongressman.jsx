@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 
 import RegisterForm from "../../components/RegisterForm/RegisterForm";
 import Logo from "../../assets/images/imgpng.png";
-import Footer from "../../components/Footer/Footer";
 import AuthContext from "../../context/AuthContext";
 
 const RegisterCongressman = () => {
@@ -54,7 +53,6 @@ const RegisterCongressman = () => {
   const habilitarBoton =
     institucion.trim() !== "" && (telefono === "" || telefono.length === 9);
 
-  // Probando *****************************************************************
   const handleRegister = async () => {
     try {
       const res = await axios.post(
@@ -149,6 +147,7 @@ const RegisterCongressman = () => {
           <div className="col-12 col-lg-6 text-center">
             <h2 className="mb-sm-5">¡Registrate como Congresista!</h2>
             <RegisterForm
+              className="form-control border border-primary"
               text="Nombre:"
               placeholder="nombre"
               value={nombre}
