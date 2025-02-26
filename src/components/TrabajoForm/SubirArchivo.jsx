@@ -20,13 +20,37 @@ const SubirArchivo = ({ archivo, onArchivoSubido }) => {
         setCargando(true);
         setError(null);
         try {
+            let nombreArchivo = archivo.name;
+            let contador = 1;
+            let existeArchivo = true;
+
+            // Verificar si el archivo ya existe y generar un nuevo nombre si es necesario
+            while (existeArchivo) {
+                try {
+                    await octokit.repos.getContent({
+                        owner: 'maicol-monge',
+                        repo: 'ArchivosCongreso',
+                        path: nombreArchivo,
+                    });
+                    // Si llegamos aquí, el archivo ya existe
+                    const partesNombre = archivo.name.split('.');
+                    const extension = partesNombre.pop();
+                    const nombreBase = partesNombre.join('.');
+                    nombreArchivo = `${nombreBase}(${contador}).${extension}`;
+                    contador++;
+                } catch (err) {
+                    // Si ocurre un error, significa que el archivo no existe
+                    existeArchivo = false;
+                }
+            }
+
             const contenido = await archivo.arrayBuffer();
             const contenidoBase64 = btoa(String.fromCharCode(...new Uint8Array(contenido)));
 
             const respuesta = await octokit.repos.createOrUpdateFileContents({
                 owner: 'maicol-monge',
                 repo: 'ArchivosCongreso',
-                path: archivo.name,
+                path: nombreArchivo,
                 message: 'Subir archivo',
                 content: contenidoBase64,
                 committer: {
@@ -46,7 +70,7 @@ const SubirArchivo = ({ archivo, onArchivoSubido }) => {
         } catch (err) {
             console.error('Error al subir archivo:', err);
             setError(err);
-            onArchivoSubido({ url: null, error: err }); 
+            onArchivoSubido({ url: null, error: err });
         } finally {
             setCargando(false);
         }
@@ -60,7 +84,7 @@ const SubirArchivo = ({ archivo, onArchivoSubido }) => {
         return <p>Error al subir el archivo: Intenta subirlo nuevamente</p>;
     }
 
-    return null; 
+    return null;
 };
 
 export default SubirArchivo;
