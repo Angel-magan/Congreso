@@ -11,6 +11,7 @@ const Home = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [sesiones, setSesiones] = useState([]);
   // El AuthContext provee { user }
+  const storedUserId = localStorage.getItem("userId"); 
   const { user } = useContext(AuthContext);
 
   // Si el usuario tiene ambos roles, podemos mostrar una sola card
