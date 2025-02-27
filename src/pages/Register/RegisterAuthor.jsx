@@ -21,15 +21,33 @@ const RegisterAuthor = () => {
 	const [aceptaTerminos, setAceptaTerminos] = useState(false);
 	const [successMessage, setSuccessMessage] = useState("");
 
+	// useEffect(() => {
+	// 	console.log("User en RegisterAuthor:", user); // Añadido para depuración
+	// 	if (user) {
+	// 		setUserData({
+	// 			nombre: user.nombre || "",
+	// 			apellido: user.apellido || "",
+	// 			correo: user.correo || "",
+	// 			idCongresista: user.idCongresista || "",
+	// 		});
+	// 	}
+	// }, [user]);
+
 	useEffect(() => {
-		console.log("User en RegisterAuthor:", user); // Añadido para depuración
+		//const testUserId = "4"; // Forzar el ID para prueba
 		if (user) {
-			setUserData({
-				nombre: user.nombre || "",
-				apellido: user.apellido || "",
-				correo: user.correo || "",
-				idCongresista: user.idCongresista || "",
-			});
+			axios
+				.get(`http://localhost:5000/api/users/autor/${user.id_usuario}`) // Cambié la URL
+				.then((response) => {
+					//console.log("Datos del usuario:", response.data);
+					setUserData({
+						nombre: response.data.nombre,
+						apellido: response.data.apellido,
+						correo: response.data.correo,
+						idCongresista: response.data.idCongresista,
+					});
+				})
+				.catch((error) => console.error("Error cargando usuario:", error));
 		}
 	}, [user]);
 
