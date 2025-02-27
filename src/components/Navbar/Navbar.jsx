@@ -1,8 +1,30 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Logo from "../../assets/images/imgpng.png";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 function Navbar() {
+
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    Swal.fire({
+      title: "¿Estás seguro que quieres cerrar sesión?",
+      text: "Se cerrará la sesión y volverás al login.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sí, cerrar sesión",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem("user"); // Elimina la sesión
+        navigate("/"); // Redirige al login
+      }
+    });
+  };
+
   return (
     <section className="sticky-top">
       <nav className="navbar navbar-dark bg-dark navbar-expand-md">
@@ -37,7 +59,11 @@ function Navbar() {
               <Link to="" className="btn text-light fs-3 bg-btn-navbar">
                 <i className="bi bi-person-fill"></i>
               </Link>
-              <Link to="/" className="btn text-danger fs-3 bg-btn-navbar">
+              <Link
+                to="#"
+                className="btn text-danger fs-3 bg-btn-navbar"
+                onClick={handleLogout}
+              >
                 <i className="bi bi-box-arrow-right"></i>
               </Link>
             </div>

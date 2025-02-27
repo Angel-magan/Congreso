@@ -195,7 +195,7 @@ const RegisterCongressman = () => {
             <div className="d-flex">
               <div className="flex-grow-1 me-2">
                 <RegisterForm
-                  text="Teléfono:"
+                  text="Teléfono: +503"
                   placeholder="XXXX-XXXX"
                   maxLength="9"
                   value={telefono}
