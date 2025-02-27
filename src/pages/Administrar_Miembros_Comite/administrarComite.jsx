@@ -6,6 +6,7 @@ import Navbar from "../../components/Navbar/Navbar";
 import "./style.css";
 import Buscador from "../../components/AdmintradorForm/Buscador";
 import Footer from "../../components/Footer/Footer";
+import Swal from "sweetalert2";
 
 const AdministrarCongresistas = () => {
   const [congresistas, setCongresistas] = useState([]);
@@ -54,12 +55,18 @@ const AdministrarCongresistas = () => {
       }
     } catch (error) {
       console.error("Error al actualizar miembro del comité:", error);
-      alert("Error al actualizar miembro del comité.");
+      Swal.fire({
+        title: "Error",
+        text: "Error al actualizar miembro del comité.",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500
+      });
     }
   };
 
   const handleFinalizar = () => {
-    navigate("/ruta/a/donde/quieras/ir");
+    navigate("/home");
   };
 
   const handleFilterChange = (value, by) => {
@@ -88,7 +95,6 @@ const AdministrarCongresistas = () => {
 
   return (
     <div>
-      <Navbar />
 
       <section className="container py-5">
         <div className="row justify-content-center">

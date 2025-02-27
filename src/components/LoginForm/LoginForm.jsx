@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import AuthContext from "../../context/AuthContext";
+import Swal from "sweetalert2";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -25,10 +26,22 @@ const LoginForm = () => {
         })
         .catch((error) => {
           console.error("Error al iniciar sesión:", error);
-          alert("Usuario o contraseña incorrectos");
+          Swal.fire({
+            title: "Error",
+            text: "Usuario o contraseña incorrectos",
+            icon: "error",
+            showConfirmButton: false,
+            timer: 1500
+          });
         });
     } else {
-      alert("Por favor, completa todos los campos.");
+      Swal.fire({
+        title: "Error",
+        text: "Por favor, completa todos los campos.",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500
+      });
     }
   };
 
