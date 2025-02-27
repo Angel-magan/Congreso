@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 import RegisterForm from "../../components/RegisterForm/RegisterForm";
 import Logo from "../../assets/images/imgpng.png";
@@ -67,7 +68,14 @@ const RegisterCongressman = () => {
         }
       );
       console.log("Respuesta de registro:", res.data);
-      alert("✅ Congresista registrado correctamente");
+
+      Swal.fire({
+        title: "Registro de congresista",
+        text: "✅ Congresista registrado correctamente",
+        icon: "success",
+        showConfirmButton: false,
+        timer: 2000
+      });
 
       // Actualizar el usuario desde la API
       const storedUser = localStorage.getItem("user");
@@ -93,9 +101,20 @@ const RegisterCongressman = () => {
       if (err.response) {
         const errorMessage = err.response.data.message;
         console.error("Error:", errorMessage);
-        alert(`❌ ${errorMessage}`);
+        Swal.fire({
+            title: "Error",
+            text: `❌ ${errorMessage}`,
+            icon: "error",
+            showConfirmButton: true
+        });
+        
       } else {
-        alert("❌ Ocurrió un error en la solicitud");
+        Swal.fire({
+          title: "Error",
+          text: "❌ Ocurrió un error en la solicitud",
+          icon: "error",
+          timer: 2000
+        });
       }
     }
   };
@@ -152,7 +171,6 @@ const RegisterCongressman = () => {
               placeholder="nombre"
               value={nombre}
               readOnly
-              onChange={(e) => setNombre(e.target.value)}
             />
 
             <RegisterForm
@@ -160,7 +178,6 @@ const RegisterCongressman = () => {
               placeholder="apellido"
               value={apellido}
               readOnly
-              onChange={(e) => setApellido(e.target.value)}
             />
 
             <RegisterForm
@@ -168,49 +185,7 @@ const RegisterCongressman = () => {
               placeholder="correo"
               value={correo}
               readOnly
-              onChange={(e) => setCorreo(e.target.value)}
             />
-
-            {/* {user ? (
-              <RegisterForm
-                className="form-control border border-primary"
-                text="Nombre:"
-                placeholder="nombre"
-                value={nombre || user.nombre}
-                readOnly
-                onChange={(e) => setNombre(user.nombre)}
-              />
-            ) : (
-              <p className="text-danger">
-                Por favor, inicia sesión para continuar.
-              </p>
-            )}
-            {user ? (
-              <RegisterForm
-                text="Apellido:"
-                placeholder="apellido"
-                value={apellido || user.apellido}
-                readOnly
-                onChange={(e) => setApellido(user.apellido)}
-              />
-            ) : (
-              <p className="text-danger">
-                Por favor, inicia sesión para continuar.
-              </p>
-            )}
-            {user ? (
-              <RegisterForm
-                text="Correo:"
-                placeholder="correo"
-                value={correo || user.correo}
-                readOnly
-                onChange={(e) => setCorreo(user.correo)}
-              />
-            ) : (
-              <p className="text-danger">
-                Por favor, inicia sesión para continuar.
-              </p>
-            )} */}
             <RegisterForm
               text="Institución:"
               placeholder="Institución"
@@ -220,7 +195,7 @@ const RegisterCongressman = () => {
             <div className="d-flex">
               <div className="flex-grow-1 me-2">
                 <RegisterForm
-                  text="Teléfono:"
+                  text="Teléfono: +503"
                   placeholder="XXXX-XXXX"
                   maxLength="9"
                   value={telefono}
