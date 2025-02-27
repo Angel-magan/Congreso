@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Swal from "sweetalert2";
 
 const Congresista = ({ congresista, onActualizarMiembro }) => {
     const [checked, setChecked] = useState(congresista.miembro_comite === "1");
@@ -10,24 +11,49 @@ const Congresista = ({ congresista, onActualizarMiembro }) => {
     const handleCheckboxChange = (event) => {
         const isChecked = event.target.checked;
 
-        const confirmacion = window.confirm(
-            `¿Estás seguro de que quieres ${isChecked ? "agregar" : "quitar"} a ${congresista.nombre} ${congresista.apellido} como miembro del comité?`
-        );
-
-        if (confirmacion) {
-            onActualizarMiembro(congresista.id_congresista, isChecked ? 1 : 0)
-                .then(() => {
-
-                    window.location.reload();
-                })
-                .catch((error) => {
-                    console.error("Error al actualizar el miembro:", error);
-
-                });
-        } else {
-
-            setChecked(!isChecked);
-        }
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: `¿Estás seguro de que quieres ${isChecked ? "agregar" : "quitar"} a ${congresista.nombre} ${congresista.apellido} como miembro del comité?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, estoy seguro',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                onActualizarMiembro(congresista.id_congresista, isChecked ? 1 : 0)
+                    .then(() => {
+                        Swal.fire({
+                            title: "Miembro de Comité",
+                            text: `El miembro de comité se ha ${isChecked ? "registrado en el comité" : "retirado del comité"} correctamente.`,
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 2000);
+                    })
+                    .catch((error) => {
+                        console.error("Error al actualizar el miembro:", error);
+                        Swal.fire({
+                            title: "Error",
+                            text: "Error al actualizar el miembro:", error,
+                            icon: "error",
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 2000);
+                    });
+                console.log("El usuario confirmó la acción");
+            } else {
+                setChecked(!isChecked);
+                console.log("El usuario canceló la acción");
+            }
+        });
     };
 
     return (

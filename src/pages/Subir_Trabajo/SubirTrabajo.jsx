@@ -5,6 +5,7 @@ import "../Subir_Trabajo/style.css";
 import Autores from "../../components/TrabajoForm/Autores";
 import SubirArchivo from "../../components/TrabajoForm/SubirArchivo";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 
 const SubirTrabajo = () => {
@@ -16,10 +17,11 @@ const SubirTrabajo = () => {
     const [documento, setDocumento] = useState(null);
     const [camposCompletados, setCamposCompletados] = useState(false);
     const [urlDocumento, setUrlDocumento] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const tituloValido = titulo.length >= 50 && titulo.length <= 200;
-        const abstractValido = abstract.length >= 900 && abstract.length <= 2000;
+        const tituloValido = titulo.length >= 30 && titulo.length <= 200;
+        const abstractValido = abstract.length >= 500 && abstract.length <= 2000;
         const autoresValidos = autoresSeleccionados.length > 0;
         const documentoValido = documento !== null;
         const urlDocumentoValido = urlDocumento !== null;
@@ -88,7 +90,9 @@ const handleSubmit = async (e) => {
             title: "Error",
             text: "Al menos uno de los autores debe ser congresista.",
             icon: "error",
-            showConfirmButton: true
+            showConfirmButton: false,
+            timer: 1500
+
         });
         return;
     }
@@ -123,7 +127,7 @@ const handleSubmit = async (e) => {
         });
 
         setTimeout(() => {
-            window.location.reload();
+            navigate("/home");
         }, 2000);
 
     } catch (error) {
@@ -163,7 +167,7 @@ const handleSubmit = async (e) => {
                         </div>
                         <div className="col-md-9 w-100">
                             <p className="text-start text-body-tertiary">
-                                Mínimo de 50 y un máximo de 200 caracteres
+                                Mínimo de 30 y un máximo de 200 caracteres
                             </p>
                             <input
                                 type="text"
@@ -181,7 +185,7 @@ const handleSubmit = async (e) => {
                         </div>
                         <div className="col-9 w-100">
                             <p className="text-start text-body-tertiary">
-                                Mínimo de 900 y un máximo de 2000 caracteres
+                                Mínimo de 500 y un máximo de 2000 caracteres
                             </p>
                             <textarea
                                 className="form-control tamanioTextArea"
