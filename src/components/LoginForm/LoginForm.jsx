@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const { setUser } = useContext(AuthContext);
 
@@ -56,13 +57,26 @@ const LoginForm = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <input
-            type="password"
-            className="form-control mb-4"
-            placeholder="Contraseña"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <div className="input-group mb-4">
+            <input
+              type={showPassword ? "text" : "password"}
+              className="form-control"
+              placeholder="Contraseña"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <span
+              className="input-group-text"
+              onClick={() => setShowPassword(!showPassword)}
+              style={{ cursor: "pointer" }}
+            >
+              {showPassword ? (
+                <i className="bi bi-eye-slash-fill fs-4 text-primary"></i>
+              ) : (
+                <i className="bi bi-eye-fill fs-4 text-primary"></i>
+              )}
+            </span>
+          </div>
           <button
             type="button"
             className="btn btn-primary px-4 mb-2"
