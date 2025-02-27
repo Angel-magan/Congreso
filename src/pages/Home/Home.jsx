@@ -5,13 +5,13 @@ import Navbar from "../../components/Navbar/Navbar";
 import AuthContext from "../../context/AuthContext";
 import Footer from "../../components/Footer/Footer";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   // eslint-disable-next-line no-unused-vars
   const [userInfo, setUserInfo] = useState(null);
   const [sesiones, setSesiones] = useState([]);
   // El AuthContext provee { user }
-  const storedUserId = localStorage.getItem("userId"); 
   const { user } = useContext(AuthContext);
 
   // Si el usuario tiene ambos roles, podemos mostrar una sola card
@@ -22,6 +22,7 @@ const Home = () => {
   const isAutor = roles.includes("Autor");
   const isNormal = !isCongresista && !isAutor;
   const isAmbos = isCongresista && isAutor;
+  const isComite = roles.includes("miembro_comite");
 
   useEffect(() => {
     const fetchSesiones = async () => {
@@ -52,30 +53,70 @@ const Home = () => {
         <p className="text-center fw-bold fs-3 m-0 mt-3">
           ¡Hola,{" "}
           <span>{user ? `${user.nombre} ${user.apellido}` : "Invitado"}</span>!
-          !
         </p>
         <section className="border border-primary border-2 p-3 m-4 rounded">
-          <h3 className="border-bottom border-primary border-3 mx-2 w-25">
-            Programación
-          </h3>
-          <div className="d-flex justify-content-center mb-2">
+          <div className="d-flex flex-column flex-md-row align-items-center justify-content-between">
+            <h3 className="border-bottom border-primary border-3 mx-2 d-inline-block">
+              Programación
+            </h3>
+
+            {isComite && (
+              <div className="dropdown mt-2 mt-md-0 text-md-end">
+                <button
+                  className="btn btn-primary dropdown-toggle px-3 py-2 shadow-sm rounded"
+                  type="button"
+                  id="dropdownMenuButton1"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  style={{
+                    minWidth: "120px",
+                    backgroundColor: "#007bff",
+                    borderColor: "#0056b3",
+                  }} // Azul moderno
+                >
+                  Navegación
+                </button>
+                <ul
+                  className="dropdown-menu dropdown-menu-end shadow rounded bg-light"
+                  aria-labelledby="dropdownMenuButton1"
+                  style={{ border: "1px solid #ddd" }} // Borde sutil
+                >
+                  <li>
+                    <Link
+                      className="dropdown-item text-dark"
+                      to="/administrarComite"
+                    >
+                      Administrar Comité
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            )}
+          </div>
+                    
+          <br />
+          <div className="row g-3">
             {Array.isArray(sesiones) ? (
               sesiones.map((sesion, index) => (
-                <Card
+                <div
                   key={index}
-                  titleJob={sesion.titulo}
-                  date={new Date(sesion.fecha_hora).toLocaleDateString()}
-                  clock={new Date(sesion.fecha_hora).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                  hall={`Sala: ${sesion.sala}`}
-                  chairman={sesion.moderador}
-                  ponente={sesion.ponente}
-                />
+                  className="col-12 col-md-6 col-lg-4 d-flex justify-content-center"
+                >
+                  <Card
+                    titleJob={sesion.titulo}
+                    date={new Date(sesion.fecha_hora).toLocaleDateString()}
+                    clock={new Date(sesion.fecha_hora).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                    hall={`Sala: ${sesion.sala}`}
+                    chairman={sesion.moderador}
+                    ponente={sesion.ponente}
+                  />
+                </div>
               ))
             ) : (
-              <p>No hay sesiones disponibles</p>
+              <p className="text-center">No hay sesiones disponibles</p>
             )}
           </div>
         </section>

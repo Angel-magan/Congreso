@@ -18,8 +18,8 @@ const SubirTrabajo = () => {
     const [urlDocumento, setUrlDocumento] = useState(null);
 
     useEffect(() => {
-        const tituloValido = titulo.length >= 0 && titulo.length <= 200;
-        const abstractValido = abstract.length >= 0 && abstract.length <= 2000;
+        const tituloValido = titulo.length >= 50 && titulo.length <= 200;
+        const abstractValido = abstract.length >= 900 && abstract.length <= 2000;
         const autoresValidos = autoresSeleccionados.length > 0;
         const documentoValido = documento !== null;
         const urlDocumentoValido = urlDocumento !== null;
@@ -140,10 +140,6 @@ const handleSubmit = async (e) => {
         }, 2000);
     }
 };
-
-
-
-
 
     return (
         <div className="fondo d-block justify-content-center align-items-center min-vh-100">
