@@ -169,7 +169,10 @@ const RegisterPage = () => {
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
-              <span onClick={() => setShowPassword(!showPassword)}>
+              <span
+                onClick={() => setShowPassword(!showPassword)}
+                style={{ cursor: "pointer" }}
+              >
                 {showPassword ? (
                   <i className="bi bi-eye-slash-fill fs-4 text-primary"></i>
                 ) : (
