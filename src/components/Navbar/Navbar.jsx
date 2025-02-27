@@ -29,12 +29,12 @@ function Navbar() {
           <div className="collapse navbar-collapse" id="navbarNav">
             <div className="d-flex align-items-center ms-auto justify-content-center gap-2">
               <Link
-                to="/voluntario"
+                to="/home"
                 className="btn text-light fs-3 bg-btn-navbar"
               >
                 <i className="bi bi-house-fill"></i>
               </Link>
-              <Link to="/donar" className="btn text-light fs-3 bg-btn-navbar">
+              <Link to="" className="btn text-light fs-3 bg-btn-navbar">
                 <i className="bi bi-person-fill"></i>
               </Link>
               <Link to="/" className="btn text-danger fs-3 bg-btn-navbar">
