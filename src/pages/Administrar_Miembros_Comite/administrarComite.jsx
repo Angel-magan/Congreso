@@ -7,6 +7,7 @@ import "./style.css";
 import Buscador from "../../components/AdmintradorForm/Buscador";
 import Footer from "../../components/Footer/Footer";
 import Swal from "sweetalert2";
+import Logo from "../../assets/images/imgpng.png";
 
 const AdministrarCongresistas = () => {
   const [congresistas, setCongresistas] = useState([]);
@@ -94,8 +95,13 @@ const AdministrarCongresistas = () => {
   }
 
   return (
-    <div>
-
+    <div className="fondo">
+      <img
+        src={Logo}
+        className="img-fluid"
+        alt="Logo"
+        style={{ width: "200px" }}
+      />
       <section className="container py-5">
         <div className="row justify-content-center">
           <div className="text-center">
@@ -144,7 +150,9 @@ const AdministrarCongresistas = () => {
           </div>
         </div>
       </section>
-
+      <div className="trianguloo"></div>
+      <div className="circulo"></div>
+      <div className="cuadrado"></div>
       <Footer />
     </div>
   );
