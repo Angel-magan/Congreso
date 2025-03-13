@@ -98,6 +98,14 @@ const Home = () => {
 											Administrar Comité
 										</Link>
 									</li>
+									<li>
+										<Link
+											className="dropdown-item text-dark"
+											to="/crearSesion"
+										>
+											Crear Sesión
+										</Link>
+									</li>
 								</ul>
 							</div>
 						)}
