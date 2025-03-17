@@ -35,9 +35,10 @@ const RegisterAuthor = () => {
 
 	useEffect(() => {
 		//const testUserId = "4"; // Forzar el ID para prueba
+		console.log(user)
 		if (user) {
 			axios
-				.get(`http://localhost:5000/api/users/autor/${user.id_usuario}`) // Cambié la URL
+				.get(`http://localhost:5000/api/users/autor/${user.id}`) // Cambié la URL
 				.then((response) => {
 					//console.log("Datos del usuario:", response.data);
 					setUserData({
