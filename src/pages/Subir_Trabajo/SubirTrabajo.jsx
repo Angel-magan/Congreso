@@ -70,13 +70,14 @@ const SubirTrabajo = () => {
         if (archivo && archivo.error) {
             console.log("Error al subir el archivo:", archivo.error);
             setUrlDocumento(null);
-            setArchivoError(true); // Actualizar archivoError a true
+            setArchivoError(true);
         } else if (archivo && archivo.url) {
             setUrlDocumento(archivo.url);
-            setArchivoError(false); // Actualizar archivoError a false
+            setArchivoError(false);
             console.log("URL del documento:", archivo.url);
         }
     };
+    
 
 
     const handleSubmit = async (e) => {
@@ -246,10 +247,7 @@ const SubirTrabajo = () => {
                         <SubirArchivo archivo={documento} onArchivoSubido={handleArchivoSubido} />
                     )}
                     
-
-                </form>
-
-                <div className="d-flex justify-content-between">
+                    <div className="d-flex justify-content-between">
                         <button
                             type="submit"
                             className="btn btn-primary w-25 py-2 fw-bold"
@@ -266,6 +264,9 @@ const SubirTrabajo = () => {
                         </button>
                         
                     </div>
+                </form>
+
+                
                 
             </div>
             <div className="trianguloo"></div>
