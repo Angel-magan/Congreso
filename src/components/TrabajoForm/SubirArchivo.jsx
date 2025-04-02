@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Octokit } from '@octokit/rest';
+import React, { useState, useEffect } from "react";
+import { createClient } from "@supabase/supabase-js";
 
-const octokit = new Octokit({
-    auth: '',
-});
+// Configura Supabase con tus claves
+const SUPABASE_URL = "https://xbfnefyndfqlspnyexsh.supabase.co";  // Reemplázalo con tu URL
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhiZm5lZnluZGZxbHNwbnlleHNoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM1MzI5OTQsImV4cCI6MjA1OTEwODk5NH0._NtmGEdvH-7EltxTvGJjWYWrX7gpJ_x469h2cv4TjBU";  // Reemplázalo con tu clave pública
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const SubirArchivo = ({ archivo, onArchivoSubido }) => {
-    const [urlArchivo, setUrlArchivo] = useState('');
     const [cargando, setCargando] = useState(false);
     const [error, setError] = useState(null);
 
@@ -19,58 +19,30 @@ const SubirArchivo = ({ archivo, onArchivoSubido }) => {
     const subirArchivo = async () => {
         setCargando(true);
         setError(null);
+
         try {
-            let nombreArchivo = archivo.name;
-            let contador = 1;
-            let existeArchivo = true;
+            const nombreArchivo = `${Date.now()}-${archivo.name}`; // Evita archivos duplicados
+            const { data, error } = await supabase.storage
+                .from("congreso") // Nombre de tu bucket
+                .upload(nombreArchivo, archivo, {
+                    cacheControl: "3600",
+                    upsert: false, // Evita sobrescribir archivos
+                });
 
-            // Verificar si el archivo ya existe y generar un nuevo nombre si es necesario
-            while (existeArchivo) {
-                try {
-                    await octokit.repos.getContent({
-                        owner: 'maicol-monge',
-                        repo: 'ArchivosCongreso',
-                        path: nombreArchivo,
-                    });
-                    // Si llegamos aquí, el archivo ya existe
-                    const partesNombre = archivo.name.split('.');
-                    const extension = partesNombre.pop();
-                    const nombreBase = partesNombre.join('.');
-                    nombreArchivo = `${nombreBase}(${contador}).${extension}`;
-                    contador++;
-                } catch (err) {
-                    // Si ocurre un error, significa que el archivo no existe
-                    existeArchivo = false;
-                }
-            }
+            if (error) throw error;
 
-            const contenido = await archivo.arrayBuffer();
-            const contenidoBase64 = btoa(String.fromCharCode(...new Uint8Array(contenido)));
+            // Obtener la URL pública del archivo
+            const { data: publicUrlData } = supabase.storage
+                .from("congreso")
+                .getPublicUrl(nombreArchivo);
 
-            const respuesta = await octokit.repos.createOrUpdateFileContents({
-                owner: 'maicol-monge',
-                repo: 'ArchivosCongreso',
-                path: nombreArchivo,
-                message: 'Subir archivo',
-                content: contenidoBase64,
-                committer: {
-                    name: 'CICMA',
-                    email: 'maicol.monge@catolica.edu.sv',
-                },
-                author: {
-                    name: 'Maicol Monge',
-                    email: 'maicol.monge@catolica.edu.sv',
-                },
-            });
-
-            const url = respuesta.data.content.html_url;
-            setUrlArchivo(url);
-            onArchivoSubido({ url: url, error: null });
-            console.log('Archivo subido exitosamente');
+            const url = publicUrlData.publicUrl;
+            onArchivoSubido({ url, error: null });
+            console.log("Archivo subido exitosamente:", url);
         } catch (err) {
-            console.error('Error al subir archivo:', err);
-            setError(err);
-            onArchivoSubido({ url: null, error: err });
+            console.error("Error al subir archivo:", err.message);
+            setError("Error al subir el archivo. Intenta nuevamente.");
+            onArchivoSubido({ url: null, error: err.message });
         } finally {
             setCargando(false);
         }
@@ -81,7 +53,7 @@ const SubirArchivo = ({ archivo, onArchivoSubido }) => {
     }
 
     if (error) {
-        return <p>Error al subir el archivo: Intenta subirlo nuevamente</p>;
+        return <p>Error al subir el archivo: Intenta nuevamente</p>;
     }
 
     return null;

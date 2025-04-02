@@ -43,14 +43,30 @@ const RegisterPage = () => {
         })
         .then((response) => {
           console.log(response.data);
-          Swal.fire({
-            title: "Registro",
-            text: "Usuario ingresado correctamente.",
-            icon: "success",
-            showConfirmButton: false,
-            timer: 3000,
-          });
-          navigate("/"); //Aqui lo manda al login
+
+          // Verificar si el mensaje indica que se registró o actualizó la contraseña
+          if (response.data.message === "Usuario registrado exitosamente.") {
+            Swal.fire({
+              title: "Registro",
+              text: "Usuario ingresado correctamente.",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 3000,
+            });
+          } else if (
+            response.data.message ===
+            "El usuario ya estaba registrado como autor. Se ha actualizado la contraseña."
+          ) {
+            Swal.fire({
+              title: "Contraseña Actualizada",
+              text: "El correo ya estaba registrado. La contraseña ha sido actualizada correctamente.",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 3000,
+            });
+          }
+
+          navigate("/"); //Aquí lo manda al login
         })
         .catch((error) => {
           if (error.response && error.response.status === 400) {
