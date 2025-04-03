@@ -1,0 +1,91 @@
+.fondo {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Asegura que ocupe toda la altura de la ventana */
+  align-items: center;
+  justify-content: flex-start; /* Alinea los elementos al inicio */
+  padding-top: 150px; /* Espacio suficiente para el logo y el cuadro amarillo */
+  position: relative; /* Asegura que los elementos posicionados absolutamente se ubiquen correctamente */
+}
+
+.fondo .sticky-bottom {
+  margin-top: auto; /* Empuja el footer al final */
+}
+
+.buttons-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Tres columnas por defecto */
+  gap: 20px; /* Espacio entre botones */
+  justify-content: center; /* Centra las columnas horizontalmente */
+  align-items: center; /* Centra los botones verticalmente */
+  margin: 20px auto; /* Espaciado alrededor del contenedor */
+  max-width: 900px; /* Ancho máximo del contenedor */
+  z-index: 1;
+}
+
+/* Estilo para los botones */
+.buttons-container .btn {
+  width: 100%; /* Los botones ocupan todo el ancho de su celda */
+  text-align: center; /* Centra el texto dentro del botón */
+  padding: 10px 15px;
+}
+
+/* LOGO */
+.logo {
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  width: 150px;
+  z-index: 2;
+}
+
+/* CUADRADO (Arriba derecha) */
+.cuadrado {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 15vw;
+  height: 15vw;
+  background-color: #f5b947;
+  z-index: 0;
+}
+
+/* TRIÁNGULO (Abajo izquierda) */
+.trianguloo {
+  position: absolute;
+  bottom: 0;
+  left: -50px;
+  width: 70vh;
+  height: 25vh;
+  border-left: 10vw solid transparent;
+  border-right: 10vw solid transparent;
+  border-top: 12vw solid #e66b4c;
+  z-index: -1;
+}
+
+/* CÍRCULO (Abajo derecha) */
+.circulo {
+  position: absolute;
+  bottom: 0;
+  right: -5vw;
+  width: 25vw;
+  height: 22vw;
+  background-color: #3b9ae1;
+  border-radius: 50%;
+  z-index: -1;
+}
+
+@media (max-width: 768px) {
+  .buttons-container {
+    grid-template-columns: repeat(
+      2,
+      1fr
+    ); /* Dos columnas en pantallas medianas */
+  }
+}
+
+@media (max-width: 480px) {
+  .buttons-container {
+    grid-template-columns: 1fr; /* Una columna en pantallas pequeñas */
+  }
+}
