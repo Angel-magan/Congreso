@@ -13,7 +13,7 @@ const Home = () => {
 	const [sesiones, setSesiones] = useState([]);
 	// El AuthContext provee { user }
 	const { user } = useContext(AuthContext);
-  const navigate = useNavigate();
+  	const navigate = useNavigate();
 
 	// Si el usuario tiene ambos roles, podemos mostrar una sola card
 	const roles = user && user.roles ? user.roles : [];
@@ -128,7 +128,7 @@ const Home = () => {
 									className="col-12 col-md-6 col-lg-4 d-flex justify-content-center"
 								>
 									<Card
-										titleJob={sesion.titulo}
+										titleJob={sesion.titulos_trabajos}
 										date={new Date(sesion.fecha_hora).toLocaleDateString()}
 										clock={new Date(sesion.fecha_hora).toLocaleTimeString([], {
 											hour: "2-digit",
@@ -136,7 +136,7 @@ const Home = () => {
 										})}
 										hall={`Sala: ${sesion.sala}`}
 										chairman={sesion.moderador}
-										ponente={sesion.ponente}
+										ponentesTrabajo={sesion.ponentes_trabajo}
 									/>
 								</div>
 							))
