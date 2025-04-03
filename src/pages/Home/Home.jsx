@@ -114,6 +114,14 @@ const Home = () => {
 											Aceptar Trabajos
 										</Link>
 									</li>
+									<li>
+										<Link
+											className="dropdown-item text-dark"
+											to="/Reportes"
+										>
+											Reportes
+										</Link>
+									</li>
 								</ul>
 							</div>
 						)}

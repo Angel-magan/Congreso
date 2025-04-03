@@ -8,12 +8,12 @@ const Trabajo = ({ trabajo }) => {
         } else if (trabajoAceptado === '1') {
             return "Aprobado ✅";
         } else {
-            return "Estado Desconocido"; // Manejar otros casos
+            return "Pendiente ⚠️"; // Manejar otros casos
         }
     };
     return (
         <Link to={`/trabajo/${trabajo.id}`} className="card mx-5 my-2 bordeTrabajo text-decoration-none text-dark">
-           
+
             <div className="card-body">
                 <h5 className="card-title fw-bold">
                     {trabajo.titulo}
