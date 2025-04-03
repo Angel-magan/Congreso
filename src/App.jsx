@@ -10,6 +10,7 @@ import SubirTrabajo from "./pages/Subir_Trabajo/SubirTrabajo"
 import CrearSesion from "./pages/Crear_Sesion/CrearSesion";
 import AceptarTrabajo from "./pages/Aceptar_Trabajo/AceptarTrabajo";
 import TrabajoDetalle from "./pages/Aceptar_Trabajo/TrabajoDetalle";
+import Reportes from "./pages/Reportes/Reportes";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/crearSesion" element={<CrearSesion />} />
         <Route path="/aceptarTrabajo" element={<AceptarTrabajo />} />
         <Route path="/trabajo/:id" element={<TrabajoDetalle />} />
+        <Route path="/reportes" element={<Reportes />} />
       </Routes>
     </Router>
   );
