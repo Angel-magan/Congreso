@@ -11,12 +11,15 @@
   },
   "dependencies": {
     "@octokit/rest": "^21.1.1",
+    "aframe": "^1.7.0",
     "axios": "^1.7.9",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-force-graph": "^1.47.6",
     "react-router-dom": "^7.1.5",
+    "recharts": "^2.15.1",
     "sweetalert2": "^11.17.2"
   },
   "devDependencies": {
