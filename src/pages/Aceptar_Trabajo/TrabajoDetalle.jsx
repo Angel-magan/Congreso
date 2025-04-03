@@ -4,6 +4,7 @@ import axios from 'axios';
 import Footer from "../../components/Footer/Footer";
 import Logo from "../../assets/images/imgpng.png";
 import Swal from "sweetalert2";
+import "./style.css";
 
 const TrabajoDetalles = () => {
     const { id } = useParams();
