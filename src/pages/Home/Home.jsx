@@ -106,6 +106,22 @@ const Home = () => {
 											Crear Sesión
 										</Link>
 									</li>
+									<li>
+										<Link
+											className="dropdown-item text-dark"
+											to="/aceptarTrabajo"
+										>
+											Aceptar Trabajos
+										</Link>
+									</li>
+									<li>
+										<Link
+											className="dropdown-item text-dark"
+											to="/Reportes"
+										>
+											Reportes
+										</Link>
+									</li>
 								</ul>
 							</div>
 						)}

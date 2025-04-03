@@ -56,7 +56,7 @@ function Navbar() {
               >
                 <i className="bi bi-house-fill"></i>
               </Link>
-              <Link to="" className="btn text-light fs-3 bg-btn-navbar">
+              <Link to="/perfil" className="btn text-light fs-3 bg-btn-navbar">
                 <i className="bi bi-person-fill"></i>
               </Link>
               <Link

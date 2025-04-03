@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext"; // Importa el AuthProvider
 
 import LoginPage from "./pages/Login/LoginPage";
 import RegisterUser from "./pages/Register/RegisterUser";
@@ -19,6 +20,10 @@ import NotificacionesCongreso from "./components/Grafica/NotificacionesCongreso"
 import CongresistasTrabajos from "./components/Grafica/CongresistasTrabajos";
 import MenuGraficas from "./pages/Graficas/MenuGraficas";
 
+import AceptarTrabajo from "./pages/Aceptar_Trabajo/AceptarTrabajo";
+import TrabajoDetalle from "./pages/Aceptar_Trabajo/TrabajoDetalle";
+import Perfil from "./pages/Perfil/Perfil";
+import Reportes from "./pages/Reportes/Reportes";
 function App() {
   return (
     <Router>
@@ -56,6 +61,10 @@ function App() {
           path="/trabajosCongresistas"
           element={<CongresistasTrabajos />}
         />
+        <Route path="/aceptarTrabajo" element={<AceptarTrabajo />} />
+        <Route path="/trabajo/:id" element={<TrabajoDetalle />} />
+        <Route path="/perfil" element={<Perfil />} />
+        <Route path="/reportes" element={<Reportes />} />
       </Routes>
     </Router>
   );
