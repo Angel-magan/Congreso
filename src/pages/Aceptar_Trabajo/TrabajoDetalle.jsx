@@ -4,8 +4,7 @@ import axios from 'axios';
 import Footer from "../../components/Footer/Footer";
 import Logo from "../../assets/images/imgpng.png";
 import Swal from "sweetalert2";
-
-
+import "./style.css";
 
 const TrabajoDetalles = () => {
     const { id } = useParams();
@@ -13,7 +12,6 @@ const TrabajoDetalles = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
-    const [numPages, setNumPages] = useState(null);
 
     useEffect(() => {
         const fetchTrabajo = async () => {
@@ -22,7 +20,6 @@ const TrabajoDetalles = () => {
             try {
                 const response = await axios.get(`http://localhost:5000/api/users/getTrabajo/${id}`);
                 setTrabajo(response.data);
-
             } catch (error) {
                 console.error("Error fetching trabajo:", error);
                 setError("Error al cargar los detalles del trabajo.");
@@ -40,8 +37,6 @@ const TrabajoDetalles = () => {
     const handleUpdateTrabajo = async () => {
         try {
             await axios.put(`http://localhost:5000/api/users/actualizarTrabajo/${id}/${trabajo.trabajoAceptado}`);
-            
-
             Swal.fire({
                 title: "Trabajo actualizado",
                 text: "El trabajo se ha guardado correctamente.",
@@ -53,7 +48,6 @@ const TrabajoDetalles = () => {
             setTimeout(() => {
                 navigate("/aceptarTrabajo");
             }, 2000);
-
         } catch (error) {
             console.error("Error updating trabajo:", error);
             setError("Error al actualizar el trabajo.");
@@ -89,8 +83,7 @@ const TrabajoDetalles = () => {
                         height="600px"
                         style={{ border: 'none' }}
                     />
-                )
-
+                );
             case 'txt':
                 return (
                     <div style={{ maxHeight: '600px', overflowY: 'auto', border: '1px solid #ccc', padding: '10px' }}>
@@ -111,7 +104,7 @@ const TrabajoDetalles = () => {
     const handleCancelar = () => {
         Swal.fire({
             title: "¿Estás seguro que quieres cancelar?",
-            text: "Todos los campos que se hayas llenado se perderan.",
+            text: "Todos los campos que se hayas llenado se perderán.",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#d33",
@@ -142,13 +135,12 @@ const TrabajoDetalles = () => {
                 <div className="form-group py-3 text-center">
                     <label className='fw-bold py-3'>Estado de Trabajo:</label>
                     <div className='d-flex justify-content-center align-items-center'>
-
                         <select className="form-control w-25" value={trabajo.trabajoAceptado} onChange={handleAceptadoChange}>
+                            <option value="2">Pendiente</option>
                             <option value="1">Aprobado</option>
                             <option value="0">Rechazado</option>
                         </select>
                     </div>
-
                 </div>
 
                 <div className='d-flex justify-content-center mt-4 '>
