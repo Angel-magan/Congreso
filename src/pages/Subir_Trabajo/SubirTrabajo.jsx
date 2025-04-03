@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Logo from "../../assets/images/imgpng.png";
 import Footer from "../../components/Footer/Footer";
 import "../Subir_Trabajo/style.css";
@@ -7,10 +7,10 @@ import BuscadorAutores from "../../components/TrabajoForm/BuscadorAutores";
 import SubirArchivo from "../../components/TrabajoForm/SubirArchivo";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-
+import AuthContext from "../../context/AuthContext"; // Importar el contexto de autenticación
 
 const SubirTrabajo = () => {
-
+    const { user } = useContext(AuthContext); // Obtener el usuario logeado desde el contexto
     const [archivoError, setArchivoError] = useState(false);
     const [titulo, setTitulo] = useState("");
     const [abstract, setAbstract] = useState("");
@@ -27,7 +27,6 @@ const SubirTrabajo = () => {
         const documentoValido = documento !== null;
         const urlDocumentoValido = urlDocumento !== null;
 
-
         setCamposCompletados(
             tituloValido && abstractValido && autoresValidos && documentoValido && urlDocumentoValido && !archivoError
         );
@@ -41,19 +40,17 @@ const SubirTrabajo = () => {
         if (e.target.files.length > 0) {
             const archivo = e.target.files[0];
             const tiposPermitidos = [
-                'application/pdf', //PDF
-                'application/msword', //DOC
-                'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // DOCX
-                'text/plain' //TXT
+                "application/pdf", // PDF
+                "application/msword", // DOC
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // DOCX
+                "text/plain", // TXT
             ];
-
-
 
             if (tiposPermitidos.includes(archivo.type)) {
                 setDocumento(archivo);
                 setUrlDocumento(null);
             } else {
-                alert('Por favor, selecciona un archivo PDF, DOC, DOCX o TXT.');
+                alert("Por favor, selecciona un archivo PDF, DOC, DOCX o TXT.");
                 e.target.value = null;
                 setDocumento(null);
             }
@@ -77,13 +74,22 @@ const SubirTrabajo = () => {
             console.log("URL del documento:", archivo.url);
         }
     };
-    
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Validar en el frontend: Si ningún autor es congresista, se muestra error.
+        // Validar que el usuario logeado sea un congresista
+        if (!user || !user.id) {
+            Swal.fire({
+                title: "Error",
+                text: "No se pudo identificar al congresista logeado.",
+                icon: "error",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            return;
+        }
+
         const tieneCongresista = autoresSeleccionados.some(autor => autor.esCongresista);
         console.log("Autores seleccionados:", autoresSeleccionados);
 
@@ -101,17 +107,18 @@ const SubirTrabajo = () => {
 
         // Proceder con el envío del formulario
         try {
-            const response = await fetch('http://localhost:5000/api/users/SubirTrabajos', {
-                method: 'POST',
+            const response = await fetch("http://localhost:5000/api/users/SubirTrabajos", {
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
                     titulo,
                     abstract,
-                    autores: autoresSeleccionados,  // Se envían los objetos completos
+                    autores: autoresSeleccionados,
                     urlArchivo: urlDocumento,
-                })
+                    id_congresista: user.id, // Enviar el ID del usuario logeado
+                }),
             });
 
             const data = await response.json();
@@ -125,20 +132,19 @@ const SubirTrabajo = () => {
                 text: "El trabajo se ha guardado correctamente.",
                 icon: "success",
                 showConfirmButton: false,
-                timer: 2000
+                timer: 2000,
             });
 
             setTimeout(() => {
                 navigate("/home");
             }, 2000);
-
         } catch (error) {
             Swal.fire({
                 title: "Error",
                 text: error.message,
                 icon: "error",
                 showConfirmButton: false,
-                timer: 2000
+                timer: 2000,
             });
 
             setTimeout(() => {
@@ -150,7 +156,7 @@ const SubirTrabajo = () => {
     const handleCancelar = () => {
         Swal.fire({
             title: "¿Estás seguro que quieres cancelar?",
-            text: "Todos los campos que se hayas llenado se perderan.",
+            text: "Todos los campos que se hayas llenado se perderán.",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#d33",
@@ -159,7 +165,7 @@ const SubirTrabajo = () => {
             cancelButtonText: "Volver a Subir Trabajo",
         }).then((result) => {
             if (result.isConfirmed) {
-                navigate("/home"); 
+                navigate("/home");
             }
         });
     };
@@ -180,6 +186,7 @@ const SubirTrabajo = () => {
                 <h1 className="fw-bold mb-4">¡Sube tu trabajo!</h1>
 
                 <form onSubmit={handleSubmit}>
+                    {/* Campos del formulario */}
                     <div className="row mb-3 text-start w-100">
                         <div className="col">
                             <p className="me-1 fw-bold fs-5">Título:</p>
@@ -246,7 +253,7 @@ const SubirTrabajo = () => {
                     {documento && (
                         <SubirArchivo archivo={documento} onArchivoSubido={handleArchivoSubido} />
                     )}
-                    
+
                     <div className="d-flex justify-content-between">
                         <button
                             type="submit"
@@ -256,18 +263,14 @@ const SubirTrabajo = () => {
                             Guardar
                         </button>
                         <button
-                            type="submit"
+                            type="button"
                             className="btn btn-danger w-25 py-2 fw-bold"
                             onClick={handleCancelar}
                         >
                             Cancelar
                         </button>
-                        
                     </div>
                 </form>
-
-                
-                
             </div>
             <div className="trianguloo"></div>
             <div className="circulo"></div>
