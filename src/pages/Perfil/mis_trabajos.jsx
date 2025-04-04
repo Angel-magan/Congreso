@@ -50,13 +50,11 @@ export default function mis_trabajos() {
     }
   }, [autorData]);
 
-  if (loading) return <div>Cargando...</div>;
+  //if (loading) return <div>Cargando...</div>;
   if (error) return <div>{error}</div>;
   if (!user) return <p>No hay usuario autenticado.</p>;
 
-  if (loading) {
-    return <div>Cargando...</div>;
-  }
+  
 
   if (error) {
     return <div>{error}</div>;
