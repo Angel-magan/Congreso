@@ -4,7 +4,7 @@ import axios from "axios";
 export default function mis_trabajos() {
   
   const user = JSON.parse(localStorage.getItem("user"));
-
+  console.log(user);
   const roles = user && user.roles ? user.roles : [];
   console.log("Roles del usuario:", roles);
 
@@ -50,13 +50,13 @@ export default function mis_trabajos() {
     }
   }, [autorData]);
 
-  if (loading) return <div>Cargando...</div>;
+  // if (loading) return <div>Cargando...</div>;
   if (error) return <div>{error}</div>;
   if (!user) return <p>No hay usuario autenticado.</p>;
 
-  if (loading) {
-    return <div>Cargando...</div>;
-  }
+  // if (loading) {
+  //   return <div>Cargando...</div>;
+  // }
 
   if (error) {
     return <div>{error}</div>;

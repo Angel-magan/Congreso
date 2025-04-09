@@ -23,7 +23,7 @@ const CrearSesion = () => {
 	const [chairmanSeleccionado, setChairmanSeleccionado] = useState(null);
 	const [miembrosFiltrados, setMiembrosFiltrados] = useState([]);
 	const [tituloBusqueda, setTituloBusqueda] = useState("");
-	const [fechaValida, setFechaValida] = useState(true); 
+	const [fechaValida, setFechaValida] = useState(true);
 
 	useEffect(() => {
 		const obtenerMiembrosComite = async () => {
@@ -103,25 +103,29 @@ const CrearSesion = () => {
 			})
 		);
 	};
-	
-	const handleFechaChange = (e) => {
-        const selectedDate = new Date(e.target.value);
-        const validDates = [
-            new Date('2025-06-25'),
-            new Date('2025-06-26'),
-            new Date('2025-06-27'),
-            new Date('2025-06-28')
-        ];
 
-        // Verificar si la fecha seleccionada es válida
-        if (validDates.some(date => date.toDateString() === selectedDate.toDateString())) {
-            setFecha(e.target.value); // Actualizar si la fecha es válida
-            setFechaValida(true); // Marcar la fecha como válida
-        } else {
-            setFechaValida(false); // Marcar la fecha como inválida
-            e.target.value = ''; // Limpiar el input si la fecha no es válida
-        }
-    };
+	const handleFechaChange = (e) => {
+		const selectedDate = new Date(e.target.value);
+		const validDates = [
+			new Date("2025-06-25"),
+			new Date("2025-06-26"),
+			new Date("2025-06-27"),
+			new Date("2025-06-28"),
+		];
+
+		// Verificar si la fecha seleccionada es válida
+		if (
+			validDates.some(
+				(date) => date.toDateString() === selectedDate.toDateString()
+			)
+		) {
+			setFecha(e.target.value); // Actualizar si la fecha es válida
+			setFechaValida(true); // Marcar la fecha como válida
+		} else {
+			setFechaValida(false); // Marcar la fecha como inválida
+			e.target.value = ""; // Limpiar el input si la fecha no es válida
+		}
+	};
 
 	const buscarMiembrosComite = (nombre) => {
 		setTerminoBusquedaChairman(nombre);
@@ -140,39 +144,61 @@ const CrearSesion = () => {
 		setTerminoBusquedaChairman(miembro.nombre);
 	};
 
+	// const guardarSesion = async () => {
+	// 	if (!fecha || !hora || !sala || !chairmanSeleccionado || trabajosSeleccionados.length === 0) {
+	// 		alert("Por favor, complete todos los campos antes de guardar.");
+	// 		return;
+	// 	}
+
+	// 	const nuevaSesion = {
+	// 		fecha_hora: `${fecha} ${hora}:00`,
+	// 		sala: parseInt(sala),
+	// 		chairman_id: chairmanSeleccionado.id_usuario,
+	// 		trabajos: trabajosSeleccionados.map((t) => ({
+	// 			id_trabajo: t.id_trabajo,
+	// 			autor_id: t.autorSeleccionado || null,
+	// 		})),
+	// 	};
+
+	// 	try {
+	// 		const response = await axios.post("http://localhost:5000/api/sesiones/crearSesion", nuevaSesion);
+	// 		console.log('first', response);
+	// 		alert("Sesión creada exitosamente");
+
+	// 		// Reiniciar los valores después de guardar
+	// 		setFecha("");
+	// 		setHora("");
+	// 		setSala("");
+	// 		setChairmanSeleccionado(null);
+	// 		setTrabajosSeleccionados([]);
+	// 		setTerminoBusquedaChairman("");
+	// 	} catch (error) {
+	// 		console.error("Error al guardar la sesión:", error);
+	// 		alert("Hubo un error al guardar la sesión");
+	// 	}
+	// };
 	const guardarSesion = async () => {
-		if (!fecha || !hora || !sala || !chairmanSeleccionado || trabajosSeleccionados.length === 0) {
-			alert("Por favor, complete todos los campos antes de guardar.");
-			return;
-		}
-	
-		const nuevaSesion = {
-			fecha_hora: `${fecha} ${hora}:00`,
-			sala: parseInt(sala),
-			chairman_id: chairmanSeleccionado.id_usuario,
-			trabajos: trabajosSeleccionados.map((t) => ({
-				id_trabajo: t.id_trabajo,
-				autor_id: t.autorSeleccionado || null,
-			})),
-		};
-	
 		try {
-			const response = await axios.post("http://localhost:5000/api/users/crear-sesion", nuevaSesion);
-			alert("Sesión creada exitosamente");
-			
-			// Reiniciar los valores después de guardar
-			setFecha("");
-			setHora("");
-			setSala("");
-			setChairmanSeleccionado(null);
-			setTrabajosSeleccionados([]);
-			setTerminoBusquedaChairman("");
+			const datosSesion = {
+				trabajos: trabajosSeleccionados.map((t) => ({
+					id_trabajo: t.id_trabajo,
+					autor_id: t.autorSeleccionado || null,
+				})),
+				fecha: `${fecha}`,
+				sala: parseInt(sala),
+				chairman_id: chairmanSeleccionado.id_usuario,
+				hora: `${hora}:00`,
+			};
+
+			const response = await axios.post(
+				"http://localhost:5000/api/sesiones/crearSesion",
+				datosSesion
+			);
+			console.log("Sesión guardada con éxito:", response.data);
 		} catch (error) {
-			console.error("Error al guardar la sesión:", error);
-			alert("Hubo un error al guardar la sesión");
+			console.error("Error error al guardar la sesión:", error);
 		}
 	};
-	
 
 	return (
 		<>
@@ -228,7 +254,9 @@ const CrearSesion = () => {
 						<div className="col-md-12 text-center w-75 mb-3">
 							{trabajosSeleccionados.length > 0 && (
 								<div className="mt-3">
-									<h3 className="badge rounded-pill text-bg-info fs-6">Trabajos Seleccionados:</h3>
+									<h3 className="badge rounded-pill text-bg-info fs-6">
+										Trabajos Seleccionados:
+									</h3>
 									<ul className="list-group border border-info-subtle mt-3">
 										{trabajosSeleccionados.map((trabajo) => (
 											<li
@@ -292,16 +320,18 @@ const CrearSesion = () => {
 							type="date"
 							value={fecha}
 							onChange={handleFechaChange}
-							placeholder={fechaValida ? '' : 'Fecha no válida'}
+							placeholder={fechaValida ? "" : "Fecha no válida"}
 						/>
-						{!fechaValida && <div>
-							<p className="text-danger mb-0">
-								Por favor, seleccione una fecha válida.
-							</p>
-							<p className="text-danger mt-0">
-								Las fechas del congreso son: 25, 26, 27 y 28 de junio de 2025.
-							</p>
-						</div> }
+						{!fechaValida && (
+							<div>
+								<p className="text-danger mb-0">
+									Por favor, seleccione una fecha válida.
+								</p>
+								<p className="text-danger mt-0">
+									Las fechas del congreso son: 25, 26, 27 y 28 de junio de 2025.
+								</p>
+							</div>
+						)}
 						<CrearSesionForm
 							text="Hora:"
 							type="time"
