@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 import CrearSesionForm from "../../components/CrearSesionForm/CrearSesionForm";
 import Footer from "../../components/Footer/Footer";
@@ -23,7 +25,8 @@ const CrearSesion = () => {
 	const [chairmanSeleccionado, setChairmanSeleccionado] = useState(null);
 	const [miembrosFiltrados, setMiembrosFiltrados] = useState([]);
 	const [tituloBusqueda, setTituloBusqueda] = useState("");
-	const [fechaValida, setFechaValida] = useState(true); 
+	const [fechaValida, setFechaValida] = useState(true);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const obtenerMiembrosComite = async () => {
@@ -45,7 +48,7 @@ const CrearSesion = () => {
 		if (titulo.trim() !== "") {
 			try {
 				const response = await axios.get(
-					`http://localhost:5000/api/users/buscar?titulo=${titulo}`
+					`http://localhost:5000/api/users/buscarParaCrearSesion?titulo=${titulo}`
 				);
 				setTrabajos(response.data);
 				setMostrarListaTrabajos(true);
@@ -103,25 +106,29 @@ const CrearSesion = () => {
 			})
 		);
 	};
-	
-	const handleFechaChange = (e) => {
-        const selectedDate = new Date(e.target.value);
-        const validDates = [
-            new Date('2025-06-25'),
-            new Date('2025-06-26'),
-            new Date('2025-06-27'),
-            new Date('2025-06-28')
-        ];
 
-        // Verificar si la fecha seleccionada es válida
-        if (validDates.some(date => date.toDateString() === selectedDate.toDateString())) {
-            setFecha(e.target.value); // Actualizar si la fecha es válida
-            setFechaValida(true); // Marcar la fecha como válida
-        } else {
-            setFechaValida(false); // Marcar la fecha como inválida
-            e.target.value = ''; // Limpiar el input si la fecha no es válida
-        }
-    };
+	const handleFechaChange = (e) => {
+		const selectedDate = new Date(e.target.value);
+		const validDates = [
+			new Date("2025-06-25"),
+			new Date("2025-06-26"),
+			new Date("2025-06-27"),
+			new Date("2025-06-28"),
+		];
+
+		// Verificar si la fecha seleccionada es válida
+		if (
+			validDates.some(
+				(date) => date.toDateString() === selectedDate.toDateString()
+			)
+		) {
+			setFecha(e.target.value); // Actualizar si la fecha es válida
+			setFechaValida(true); // Marcar la fecha como válida
+		} else {
+			setFechaValida(false); // Marcar la fecha como inválida
+			e.target.value = ""; // Limpiar el input si la fecha no es válida
+		}
+	};
 
 	const buscarMiembrosComite = (nombre) => {
 		setTerminoBusquedaChairman(nombre);
@@ -141,38 +148,52 @@ const CrearSesion = () => {
 	};
 
 	const guardarSesion = async () => {
+		// Validar que todos los campos estén completos
 		if (!fecha || !hora || !sala || !chairmanSeleccionado || trabajosSeleccionados.length === 0) {
-			alert("Por favor, complete todos los campos antes de guardar.");
+			Swal.fire({
+				title: "Error",
+				text: "Por favor, complete todos los campos antes de guardar.",
+				icon: "error",
+				showConfirmButton: false,
+				timer: 2000})
 			return;
 		}
-	
-		const nuevaSesion = {
-			fecha_hora: `${fecha} ${hora}:00`,
-			sala: parseInt(sala),
-			chairman_id: chairmanSeleccionado.id_usuario,
-			trabajos: trabajosSeleccionados.map((t) => ({
-				id_trabajo: t.id_trabajo,
-				autor_id: t.autorSeleccionado || null,
-			})),
-		};
-	
+
 		try {
-			const response = await axios.post("http://localhost:5000/api/users/crear-sesion", nuevaSesion);
-			alert("Sesión creada exitosamente");
-			
-			// Reiniciar los valores después de guardar
-			setFecha("");
-			setHora("");
-			setSala("");
-			setChairmanSeleccionado(null);
-			setTrabajosSeleccionados([]);
-			setTerminoBusquedaChairman("");
+			const datosSesion = {
+				trabajos: trabajosSeleccionados.map((t) => ({
+					id_trabajo: t.id_trabajo,
+					autor_id: t.autorSeleccionado || null,
+				})),
+				fecha: `${fecha}`,
+				sala: parseInt(sala),
+				chairman_id: chairmanSeleccionado?.id_usuario, // Validar que chairmanSeleccionado no sea null
+				hora: `${hora}:00`,
+			};
+
+			const response = await axios.post(
+				"http://localhost:5000/api/sesiones/crearSesion",
+				datosSesion
+			);
+
+			Swal.fire({
+				title: "Success",
+				text: "Sesión guardada con éxito",
+				icon: "success",
+				showConfirmButton: false,
+				timer: 1500});
+			navigate("/home");
+			console.log("Sesión guardada con éxito:", response.data);
 		} catch (error) {
+			// Manejar errores del servidor y mostrar mensaje al usuario
+			if (error.response && error.response.data && error.response.data.error) {
+				alert(`Error: ${error.response.data.error}`);
+			} else {
+				alert("Hubo un error al guardar la sesión.");
+			}
 			console.error("Error al guardar la sesión:", error);
-			alert("Hubo un error al guardar la sesión");
 		}
 	};
-	
 
 	return (
 		<>
@@ -228,7 +249,9 @@ const CrearSesion = () => {
 						<div className="col-md-12 text-center w-75 mb-3">
 							{trabajosSeleccionados.length > 0 && (
 								<div className="mt-3">
-									<h3 className="badge rounded-pill text-bg-info fs-6">Trabajos Seleccionados:</h3>
+									<h3 className="badge rounded-pill text-bg-info fs-6">
+										Trabajos Seleccionados:
+									</h3>
 									<ul className="list-group border border-info-subtle mt-3">
 										{trabajosSeleccionados.map((trabajo) => (
 											<li
@@ -292,16 +315,18 @@ const CrearSesion = () => {
 							type="date"
 							value={fecha}
 							onChange={handleFechaChange}
-							placeholder={fechaValida ? '' : 'Fecha no válida'}
+							placeholder={fechaValida ? "" : "Fecha no válida"}
 						/>
-						{!fechaValida && <div>
-							<p className="text-danger mb-0">
-								Por favor, seleccione una fecha válida.
-							</p>
-							<p className="text-danger mt-0">
-								Las fechas del congreso son: 25, 26, 27 y 28 de junio de 2025.
-							</p>
-						</div> }
+						{!fechaValida && (
+							<div>
+								<p className="text-danger mb-0">
+									Por favor, seleccione una fecha válida.
+								</p>
+								<p className="text-danger mt-0">
+									Las fechas del congreso son: 25, 26, 27 y 28 de junio de 2025.
+								</p>
+							</div>
+						)}
 						<CrearSesionForm
 							text="Hora:"
 							type="time"
