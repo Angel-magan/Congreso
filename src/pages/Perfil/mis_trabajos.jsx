@@ -21,7 +21,7 @@ export default function mis_trabajos() {
   useEffect(() => {
     if (isAutor && !autorData) {
       axios
-        .get(`http://localhost:5000/api/congresistas/getInfoAuthor/${user.id}`)
+        .get(`http://localhost:5000/api/congresistas/getInfoAuthor/${user.id || user.id_usuario}`)
         .then((response) => {
           setAutorData(response.data);
         })

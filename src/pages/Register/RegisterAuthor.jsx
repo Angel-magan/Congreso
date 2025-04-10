@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 
 const RegisterAuthor = () => {
 	const { user, setUser } = useContext(AuthContext);
+	//user = JSON.parse(localStorage.getItem("user"));
 	const navigate = useNavigate();
 
 	const [userData, setUserData] = useState({
@@ -38,7 +39,7 @@ const RegisterAuthor = () => {
 		console.log(user)
 		if (user) {
 			axios
-				.get(`http://localhost:5000/api/users/autor/${user.id}`) // Cambié la URL
+				.get(`http://localhost:5000/api/users/autor/${user.id || user.id_usuario}`) // Cambié la URL
 				.then((response) => {
 					//console.log("Datos del usuario:", response.data);
 					setUserData({
@@ -85,12 +86,12 @@ const RegisterAuthor = () => {
 				const userId = currentUser.id || currentUser.id_usuario;
 
 				const userRes = await axios.get(
-					`http://localhost:5000/api/users/infoUser/${userId}`
+					`http://localhost:5000/api/users/infoUser/${userId }`
 				);
 
-				//console.log("Usuario actualizado:", userRes.data);
+				console.log("Usuario actualizado:", userRes.data);
 
-				//localStorage.setItem("user", JSON.stringify(userRes.data));
+				localStorage.setItem("user", JSON.stringify(userRes.data));
 
 				setUser(userRes.data);
 			}
