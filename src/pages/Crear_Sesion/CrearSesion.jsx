@@ -29,19 +29,26 @@ const CrearSesion = () => {
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		const obtenerMiembrosComite = async () => {
-			try {
-				const response = await axios.get(
-					"http://localhost:5000/api/users/miembros-comite"
-				);
-				setMiembrosComite(response.data);
-				setMiembrosFiltrados(response.data); // Inicialmente, mostrar todos
-			} catch (error) {
-				console.error("Error al obtener miembros del comité:", error);
-			}
-		};
-		obtenerMiembrosComite();
-	}, []);
+		// Solo llamar al endpoint si fecha y hora tienen valores
+		if (fecha && hora) {
+			const obtenerMiembrosComite = async () => {
+				try {
+					const response = await axios.get(
+						"http://localhost:5000/api/sesiones/miembros-comite",
+						{
+							params: { fecha, hora }, // Pasar fecha y hora como parámetros
+						}
+					);
+					console.log("Miembros del comité (JSON):", JSON.stringify(response.data, null, 2));
+					setMiembrosComite(response.data);
+					setMiembrosFiltrados(response.data); 
+				} catch (error) {
+					console.error("Error al obtener miembros del comité:", error);
+				}
+			};
+			obtenerMiembrosComite();
+		}
+	}, [fecha, hora]);
 
 	const buscarTrabajos = async (titulo) => {
 		setTituloBusqueda(titulo);
@@ -96,15 +103,21 @@ const CrearSesion = () => {
 		);
 		setTrabajosSeleccionados(nuevosTrabajosSeleccionados);
 	};
+
 	const handleAutorChange = (trabajoId, autorId) => {
-		setTrabajosSeleccionados((prevTrabajos) =>
-			prevTrabajos.map((trabajo) => {
+		// Depurar el cambio de autor
+		console.log(`Cambiando autor para trabajo ID ${trabajoId} a autor ID ${autorId}`);
+		setTrabajosSeleccionados((prevTrabajos) => {
+			const nuevosTrabajos = prevTrabajos.map((trabajo) => {
 				if (trabajo.id_trabajo === trabajoId) {
-					return { ...trabajo, autorSeleccionado: autorId };
+					return { ...trabajo, autorSeleccionado: autorId }; // Actualizar autorSeleccionado
 				}
 				return trabajo;
-			})
-		);
+			});
+			// Depurar el estado actualizado
+			console.log("Estado actualizado de trabajosSeleccionados:", JSON.stringify(nuevosTrabajos, null, 2));
+			return nuevosTrabajos;
+		});
 	};
 
 	const handleFechaChange = (e) => {
@@ -143,8 +156,9 @@ const CrearSesion = () => {
 	};
 
 	const seleccionarChairman = (miembro) => {
-		setChairmanSeleccionado(miembro);
-		setTerminoBusquedaChairman(miembro.nombre+miembro.apellido);
+		console.log("Chairman seleccionado: ", miembro); // Depuración
+		setChairmanSeleccionado(miembro); // Asegúrate de que miembro incluye id_usuario
+		setTerminoBusquedaChairman(`${miembro.nombre} ${miembro.apellido}`);
 	};
 
 	const guardarSesion = async () => {
@@ -155,22 +169,31 @@ const CrearSesion = () => {
 				text: "Por favor, complete todos los campos antes de guardar.",
 				icon: "error",
 				showConfirmButton: false,
-				timer: 2000})
+				timer: 2000,
+			});
 			return;
 		}
 
 		try {
+			// Depurar el estado de trabajosSeleccionados antes de construir datosSesion
+			console.log("Estado de trabajosSeleccionados antes de enviar:", JSON.stringify(trabajosSeleccionados, null, 2));
+
+			// Crear el objeto con los datos de la sesión
 			const datosSesion = {
 				trabajos: trabajosSeleccionados.map((t) => ({
 					id_trabajo: t.id_trabajo,
-					autor_id: t.autorSeleccionado || null,
+					id_autor: t.autorSeleccionado || null,
 				})),
 				fecha: `${fecha}`,
 				sala: parseInt(sala),
-				chairman_id: chairmanSeleccionado?.id_usuario, // Validar que chairmanSeleccionado no sea null
+				chairman_id: chairmanSeleccionado?.id_usuario,
 				hora: `${hora}:00`,
 			};
 
+			// Imprimir los datos enviados al backend
+			console.log("Datos enviados al servidor:", JSON.stringify(datosSesion, null, 2));
+
+			// Enviar los datos al servidor
 			const response = await axios.post(
 				"http://localhost:5000/api/sesiones/crearSesion",
 				datosSesion
@@ -181,7 +204,8 @@ const CrearSesion = () => {
 				text: "Sesión guardada con éxito",
 				icon: "success",
 				showConfirmButton: false,
-				timer: 1500});
+				timer: 1500,
+			});
 			navigate("/home");
 			console.log("Sesión guardada con éxito:", response.data);
 		} catch (error) {
@@ -210,7 +234,7 @@ const CrearSesion = () => {
 							id="bordeAzulCongresistas"
 							className="py-2 text-center text-md-start"
 						>
-							Sesión #: X
+							Nueva sesión
 						</h3>
 					</div>
 					<div className="row d-flex justify-content-center align-items-center text-center">
@@ -289,7 +313,7 @@ const CrearSesion = () => {
 																	key={autor.id_autor}
 																	value={autor.id_autor}
 																>
-																	{autor.nombre}
+																	{autor.nombre} {autor.apellido}
 																</option>
 															))}
 														</select>
@@ -373,7 +397,7 @@ const CrearSesion = () => {
 							</ul>
 						</div>
 
-						<div>
+						<div className="d-flex justify-content-evenly">
 							<button
 								className="btn btn-primary fw-bold px-4 mt-5 col-md-2 col-sm-8"
 								style={{
@@ -384,6 +408,17 @@ const CrearSesion = () => {
 								onClick={guardarSesion}
 							>
 								Crear Sesión
+							</button>
+							<button
+								className="btn btn-secondary fw-bold px-4 mt-5 col-md-2 col-sm-8"
+								style={{
+									boxShadow: "0px 4px 10px #000",
+									border: "none",
+									padding: "10px",
+								}}
+								onClick={() => navigate("/home")}
+							>
+								Cancelar
 							</button>
 						</div>
 					</div>

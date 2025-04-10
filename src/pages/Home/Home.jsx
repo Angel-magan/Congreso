@@ -144,6 +144,9 @@ const Home = () => {
 									key={index}
 									className="col-12 col-md-6 col-lg-4 d-flex justify-content-center"
 								>
+									{/* Depurar los datos de la sesión */}
+									{console.log("Sesión:-- ", sesion)}
+
 									<Card
 										titleJob={sesion.titulos_trabajos}
 										date={new Date(sesion.fecha_hora).toLocaleDateString()}
@@ -153,14 +156,10 @@ const Home = () => {
 										})}
 										hall={`Sala: ${sesion.sala}`}
 										chairman={sesion.moderador}
-										ponentesTrabajo={sesion.ponentes_trabajo}
+										ponentesTrabajo={sesion.ponentes_trabajo || "No hay ponentes disponibles"} // Mostrar mensaje si está vacío
 										idSesion={sesion.id_sesion}
-										
 									/>
-									
 								</div>
-							
-								
 							))
 						) : (
 							<p className="text-center">No hay sesiones disponibles</p>
