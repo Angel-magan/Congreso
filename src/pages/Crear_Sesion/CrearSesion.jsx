@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 import CrearSesionForm from "../../components/CrearSesionForm/CrearSesionForm";
 import Footer from "../../components/Footer/Footer";
@@ -24,6 +26,7 @@ const CrearSesion = () => {
 	const [miembrosFiltrados, setMiembrosFiltrados] = useState([]);
 	const [tituloBusqueda, setTituloBusqueda] = useState("");
 	const [fechaValida, setFechaValida] = useState(true);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const obtenerMiembrosComite = async () => {
@@ -45,7 +48,7 @@ const CrearSesion = () => {
 		if (titulo.trim() !== "") {
 			try {
 				const response = await axios.get(
-					`http://localhost:5000/api/users/buscar?titulo=${titulo}`
+					`http://localhost:5000/api/users/buscarParaCrearSesion?titulo=${titulo}`
 				);
 				setTrabajos(response.data);
 				setMostrarListaTrabajos(true);
@@ -144,40 +147,18 @@ const CrearSesion = () => {
 		setTerminoBusquedaChairman(miembro.nombre);
 	};
 
-	// const guardarSesion = async () => {
-	// 	if (!fecha || !hora || !sala || !chairmanSeleccionado || trabajosSeleccionados.length === 0) {
-	// 		alert("Por favor, complete todos los campos antes de guardar.");
-	// 		return;
-	// 	}
-
-	// 	const nuevaSesion = {
-	// 		fecha_hora: `${fecha} ${hora}:00`,
-	// 		sala: parseInt(sala),
-	// 		chairman_id: chairmanSeleccionado.id_usuario,
-	// 		trabajos: trabajosSeleccionados.map((t) => ({
-	// 			id_trabajo: t.id_trabajo,
-	// 			autor_id: t.autorSeleccionado || null,
-	// 		})),
-	// 	};
-
-	// 	try {
-	// 		const response = await axios.post("http://localhost:5000/api/sesiones/crearSesion", nuevaSesion);
-	// 		console.log('first', response);
-	// 		alert("Sesión creada exitosamente");
-
-	// 		// Reiniciar los valores después de guardar
-	// 		setFecha("");
-	// 		setHora("");
-	// 		setSala("");
-	// 		setChairmanSeleccionado(null);
-	// 		setTrabajosSeleccionados([]);
-	// 		setTerminoBusquedaChairman("");
-	// 	} catch (error) {
-	// 		console.error("Error al guardar la sesión:", error);
-	// 		alert("Hubo un error al guardar la sesión");
-	// 	}
-	// };
 	const guardarSesion = async () => {
+		// Validar que todos los campos estén completos
+		if (!fecha || !hora || !sala || !chairmanSeleccionado || trabajosSeleccionados.length === 0) {
+			Swal.fire({
+				title: "Error",
+				text: "Por favor, complete todos los campos antes de guardar.",
+				icon: "error",
+				showConfirmButton: false,
+				timer: 2000})
+			return;
+		}
+
 		try {
 			const datosSesion = {
 				trabajos: trabajosSeleccionados.map((t) => ({
@@ -186,7 +167,7 @@ const CrearSesion = () => {
 				})),
 				fecha: `${fecha}`,
 				sala: parseInt(sala),
-				chairman_id: chairmanSeleccionado.id_usuario,
+				chairman_id: chairmanSeleccionado?.id_usuario, // Validar que chairmanSeleccionado no sea null
 				hora: `${hora}:00`,
 			};
 
@@ -194,9 +175,23 @@ const CrearSesion = () => {
 				"http://localhost:5000/api/sesiones/crearSesion",
 				datosSesion
 			);
+
+			Swal.fire({
+				title: "Success",
+				text: "Sesión guardada con éxito",
+				icon: "success",
+				showConfirmButton: false,
+				timer: 1500});
+			navigate("/home");
 			console.log("Sesión guardada con éxito:", response.data);
 		} catch (error) {
-			console.error("Error error al guardar la sesión:", error);
+			// Manejar errores del servidor y mostrar mensaje al usuario
+			if (error.response && error.response.data && error.response.data.error) {
+				alert(`Error: ${error.response.data.error}`);
+			} else {
+				alert("Hubo un error al guardar la sesión.");
+			}
+			console.error("Error al guardar la sesión:", error);
 		}
 	};
 
