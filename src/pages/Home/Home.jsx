@@ -122,11 +122,20 @@ const Home = () => {
 											Reportes
 										</Link>
 									</li>
+									<li>
+										<Link
+											className="dropdown-item text-dark"
+											to="/menuGraficas"
+										>
+											Gráficas
+										</Link>
+									</li>
 								</ul>
 							</div>
 						)}
 					</div>
-					          
+
+
 					<br />
 					<div className="row g-3">
 						{Array.isArray(sesiones) ? (
@@ -145,8 +154,13 @@ const Home = () => {
 										hall={`Sala: ${sesion.sala}`}
 										chairman={sesion.moderador}
 										ponentesTrabajo={sesion.ponentes_trabajo}
+										idSesion={sesion.id_sesion}
+										
 									/>
+									
 								</div>
+							
+								
 							))
 						) : (
 							<p className="text-center">No hay sesiones disponibles</p>

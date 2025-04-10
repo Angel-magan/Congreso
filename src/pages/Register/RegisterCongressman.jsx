@@ -77,23 +77,29 @@ const RegisterCongressman = () => {
         timer: 2000
       });
 
-      // Actualizar el usuario desde la API
-      const storedUser = localStorage.getItem("user");
-      if (storedUser) {
-        const currentUser = JSON.parse(storedUser);
-        const userId = currentUser.id || currentUser.id_usuario;
-        const userRes = await axios.get(
-          `http://localhost:5000/api/users/infoUser/${userId}`
-        );
-
-        console.log("Usuario actualizado:", userRes.data);
-
-        // Guardar el usuario actualizado en localStorage
-        //localStorage.setItem("user", JSON.stringify(userRes.data));
-
-        // Actualizar el contexto de autenticación
-        setUser(userRes.data);
-      }
+        // Actualizar los datos del usuario desde la API
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+          const currentUser = JSON.parse(storedUser);
+          const userId = currentUser.id || currentUser.id_usuario;
+    
+          if (userId) {
+            // Obtener los datos actualizados del usuario
+            const userRes = await axios.get(
+              `http://localhost:5000/api/users/infoUser/${userId}`
+            );
+    
+            console.log("Usuario actualizado:", userRes.data);
+    
+            // Guardar el usuario actualizado en localStorage
+            localStorage.setItem("user", JSON.stringify(userRes.data));
+    
+            // Actualizar el contexto de autenticación
+            setUser(userRes.data); // Asegúrate de que `setUser` está bien gestionado
+          } else {
+            console.error("No se encontró un ID de usuario válido.");
+          }
+        }
 
       // Redirigir al home
       navigate("/home");

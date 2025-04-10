@@ -5,7 +5,7 @@ import { data } from "react-router-dom";
 
 export default function MisDatos() {
   const user = JSON.parse(localStorage.getItem("user"));
-
+  console.log("User en MisDatos:", user); // Añadido para depuración
   const roles = user && user.roles ? user.roles : [];
   console.log("Roles del usuario:", roles);
 
@@ -25,7 +25,7 @@ export default function MisDatos() {
       // Realizar la solicitud para obtener los datos del congresista usando el ID del usuario
       axios
         .get(
-          `http://localhost:5000/api/congresistas/congressmanInfo/${user.id}`
+          `http://localhost:5000/api/congresistas/congressmanInfo/${user.id || user.id_usuario}`
         )
         .then((response) => {
           setCongresistaData(response.data); // Guardar los datos en el estado

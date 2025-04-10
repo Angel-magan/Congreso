@@ -51,7 +51,9 @@ const Reportes = () => {
             <div className="trianguloo"></div>
             <div className="circulo"></div>
             <div className="cuadrado"></div>
-            <Footer />
+            <div className="sticky-bottom w-100 mb-0">
+                <Footer />
+            </div>
         </div>
     );
 };
