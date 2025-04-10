@@ -81,16 +81,16 @@ const RegisterAuthor = () => {
 
 			const storedUser = localStorage.getItem("user");
 			if (storedUser) {
-				const currentUser = JSON.parse(storedUser);
+				const currentUser = JSON.parse(localStorage.getItem("user"));
 				const userId = currentUser.id || currentUser.id_usuario;
 
 				const userRes = await axios.get(
 					`http://localhost:5000/api/users/infoUser/${userId}`
 				);
 
-				console.log("Usuario actualizado:", userRes.data);
+				//console.log("Usuario actualizado:", userRes.data);
 
-				localStorage.setItem("user", JSON.stringify(userRes.data));
+				//localStorage.setItem("user", JSON.stringify(userRes.data));
 
 				setUser(userRes.data);
 			}

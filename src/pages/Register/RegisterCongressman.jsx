@@ -89,7 +89,7 @@ const RegisterCongressman = () => {
         console.log("Usuario actualizado:", userRes.data);
 
         // Guardar el usuario actualizado en localStorage
-        localStorage.setItem("user", JSON.stringify(userRes.data));
+        //localStorage.setItem("user", JSON.stringify(userRes.data));
 
         // Actualizar el contexto de autenticación
         setUser(userRes.data);
