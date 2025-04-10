@@ -39,9 +39,9 @@ const CongresistasTrabajos = () => {
         >
           <XAxis type="number" />
           <YAxis dataKey="nombre" type="category" />
-          <Tooltip formatter={(value) => `${value} trabajos`} />
+          <Tooltip formatter={(value) => `${value} `} />
           <Bar
-            dataKey="cantidad_trabajos"
+            dataKey="cantidad_congresistas"
             fill="#82ca9d"
             name="Trabajos Subidos"
           />

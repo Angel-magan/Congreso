@@ -81,12 +81,12 @@ const ReporteAutoresNoCongresistas = () => {
             )}
 
             {pdfBlobUrl && (
-                <div className="mt-4">
+                <div className="mt-4" style={{width:"1000px"}}>
                     <h3>Vista Previa del Reporte</h3>
                     <iframe
                         src={pdfBlobUrl}
                         title="Vista Previa del Reporte"
-                        style={{ width: "100%", height: "500px", border: "1px solid #ccc" }}
+                        style={{ width: "300px", height: "500px", border: "1px solid #ccc" }}
                     ></iframe>
                     <button
                         type="button"

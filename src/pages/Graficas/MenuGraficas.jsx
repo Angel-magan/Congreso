@@ -55,6 +55,8 @@ const MenuGraficas = () => {
       <div className="circulo"></div>
 
       {/* Botones para navegar */}
+      
+      <h2 className="pb-4 fw-bold" id="Encabezado">Generar Gráficas</h2>
       <div className="buttons-container">
         <button
           onClick={() => setSelectedGraph("congressForInstitution")}
