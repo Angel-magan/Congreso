@@ -144,7 +144,7 @@ const CrearSesion = () => {
 
 	const seleccionarChairman = (miembro) => {
 		setChairmanSeleccionado(miembro);
-		setTerminoBusquedaChairman(miembro.nombre);
+		setTerminoBusquedaChairman(miembro.nombre+miembro.apellido);
 	};
 
 	const guardarSesion = async () => {

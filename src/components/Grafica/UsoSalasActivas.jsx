@@ -14,6 +14,7 @@ const UsoSalasCongreso = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+
   useEffect(() => {
     const fetchDatos = async () => {
       try {
@@ -27,8 +28,11 @@ const UsoSalasCongreso = () => {
 
         // Asegurar que los valores numéricos sean enteros
         const datosProcesados = data.map((item) => ({
-          horario: item.horario,
-          sesiones_activas: parseInt(item.sesiones_activas, 10) || 0,
+          fecha: new Date(item.fecha).toLocaleDateString("es-ES", {
+            day: "2-digit",
+            month: "short",
+          }),
+          salas_en_uso: parseInt(item.salas_en_uso, 10) || 0,
         }));
 
         setDatosGrafico(datosProcesados);
@@ -51,13 +55,15 @@ const UsoSalasCongreso = () => {
       <ResponsiveContainer width="100%" height={400}>
         <LineChart data={datosGrafico}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="horario" padding={{ left: 40, right: 20 }} />
-          <YAxis
-            tickFormatter={(value) => Math.round(value)}
-            allowDecimals={false}
-          />
+          <XAxis dataKey="fecha" angle={-45} textAnchor="end" height={60} />
+          <YAxis allowDecimals={false} />
           <Tooltip />
-          <Line type="monotone" dataKey="sesiones_activas" stroke="#8884d8" />
+          <Line
+            type="monotone"
+            dataKey="salas_en_uso"
+            stroke="#00bcd4"
+            strokeWidth={3}
+          />
         </LineChart>
       </ResponsiveContainer>
     </div>

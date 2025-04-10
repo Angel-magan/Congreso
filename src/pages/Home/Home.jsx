@@ -122,6 +122,14 @@ const Home = () => {
 											Reportes
 										</Link>
 									</li>
+									<li>
+										<Link
+											className="dropdown-item text-dark"
+											to="/menuGraficas"
+										>
+											Gráficas
+										</Link>
+									</li>
 								</ul>
 							</div>
 						)}

@@ -79,7 +79,7 @@ const ReporteTrabajosNoAceptados = () => {
             )}
 
             {pdfBlobUrl && (
-                <div className="mt-4">
+                <div className="mt-4" style={{width:"1000px"}}>
                     <h3>Vista Previa del Reporte</h3>
                     <iframe
                         src={pdfBlobUrl}
