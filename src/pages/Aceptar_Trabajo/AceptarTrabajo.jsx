@@ -88,7 +88,7 @@ const AdministrarTrabajos = () => {
                             </div>
                         </div>
 
-                        <div className="mt-3">
+                        <div className="mt-3" style={{ maxHeight: 400, overflowY: 'auto' }}>
                             {filteredTrabajos.length > 0 ? (
                                 filteredTrabajos.map((trabajo) => (
                                     <Trabajo key={trabajo.id} trabajo={trabajo} />
@@ -113,7 +113,10 @@ const AdministrarTrabajos = () => {
             <div className="trianguloo"></div>
             <div className="circulo"></div>
             <div className="cuadrado"></div>
-            <Footer />
+            <div className="w-100">
+
+                <Footer />
+            </div>
         </div>
     );
 };

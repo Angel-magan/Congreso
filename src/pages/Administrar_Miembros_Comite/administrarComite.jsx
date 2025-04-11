@@ -123,7 +123,7 @@ const AdministrarCongresistas = () => {
             </div>
 
             {/* Lista de Congresistas */}
-            <div className="mt-3">
+            <div className="mt-3" style={{ maxHeight: 400, overflowY: 'auto', border: '1px solid #3498db' }}>
               {filteredCongresistas.length > 0 ? (
                 filteredCongresistas.map((congresista) => (
                   <Congresista
@@ -153,7 +153,9 @@ const AdministrarCongresistas = () => {
       <div className="trianguloo"></div>
       <div className="circulo"></div>
       <div className="cuadrado"></div>
-      <Footer />
+      <div className="w-100">
+        <Footer />
+      </div>
     </div>
   );
 };

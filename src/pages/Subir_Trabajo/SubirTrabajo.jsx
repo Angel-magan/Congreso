@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import AuthContext from "../../context/AuthContext"; // Importar el contexto de autenticación
 
 const SubirTrabajo = () => {
-    const { user } = useContext(AuthContext); // Obtener el usuario logeado desde el contexto
+    const user = JSON.parse(localStorage.getItem("user"));
     const [archivoError, setArchivoError] = useState(false);
     const [titulo, setTitulo] = useState("");
     const [abstract, setAbstract] = useState("");
@@ -79,7 +79,7 @@ const SubirTrabajo = () => {
         e.preventDefault();
 
         // Validar que el usuario logeado sea un congresista
-        if (!user || !user.id) {
+        if (!user || !user.id || !user.id_usuario) {
             Swal.fire({
                 title: "Error",
                 text: "No se pudo identificar al congresista logeado.",
@@ -117,7 +117,7 @@ const SubirTrabajo = () => {
                     abstract,
                     autores: autoresSeleccionados,
                     urlArchivo: urlDocumento,
-                    id_congresista: user.id, // Enviar el ID del usuario logeado
+                    id_congresista: user.id || user.id_usuario, // Enviar el ID del usuario logeado
                 }),
             });
 

@@ -63,7 +63,7 @@ const Home = () => {
 					¡Hola,{" "}
 					<span>{user ? `${user.nombre} ${user.apellido}` : "Invitado"}</span>!
 				</p>
-				<section className="border border-primary border-2 p-3 m-4 rounded">
+				<section className="border border-primary border-2 p-3 m-4 rounded" >
 					<div className="d-flex flex-column flex-md-row align-items-center justify-content-between">
 						<h3 className="border-bottom border-primary border-3 mx-2 d-inline-block">
 							Programación
@@ -83,7 +83,7 @@ const Home = () => {
 										borderColor: "#0056b3",
 									}} // Azul moderno
 								>
-									Navegación
+									Administración
 								</button>
 								<ul
 									className="dropdown-menu dropdown-menu-end shadow rounded bg-light"
@@ -137,7 +137,7 @@ const Home = () => {
 
 
 					<br />
-					<div className="row g-3">
+					<div className="row g-3 mt-3" style={{ maxHeight: 400, overflowY: 'auto' }}>
 						{Array.isArray(sesiones) ? (
 							sesiones.map((sesion, index) => (
 								<div

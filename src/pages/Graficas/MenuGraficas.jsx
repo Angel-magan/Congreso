@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import "./style.css";
 import Logo from "../../assets/images/imgpng.png";
@@ -15,6 +16,7 @@ import Footer from "../../components/Footer/Footer";
 
 const MenuGraficas = () => {
   const [selectedGraph, setSelectedGraph] = useState(null);
+  const navigate = useNavigate();
 
   const renderGraph = () => {
     switch (selectedGraph) {
@@ -55,14 +57,14 @@ const MenuGraficas = () => {
       <div className="circulo"></div>
 
       {/* Botones para navegar */}
-      
+
       <h2 className="pb-4 fw-bold" id="Encabezado">Generar Gráficas</h2>
       <div className="buttons-container">
         <button
           onClick={() => setSelectedGraph("congressForInstitution")}
           className="btn btn-primary"
         >
-          Ver Congress For Institution
+          Ver congresistas por institución
         </button>
         <button
           onClick={() => setSelectedGraph("topTenAutores")}
@@ -118,6 +120,15 @@ const MenuGraficas = () => {
       {/* Renderiza la gráfica seleccionada */}
       <div className="graph-container w-75">{renderGraph()}</div>
 
+      <div className="d-flex justify-content-center mt-4">
+        <button
+          type="button"
+          className="btn btn-secondary fw-bold px-4"
+          onClick={() => navigate("/home")}
+        >
+          Volver
+        </button>
+      </div>
       <div className="sticky-bottom w-100 mb-0">
         <Footer />
       </div>
